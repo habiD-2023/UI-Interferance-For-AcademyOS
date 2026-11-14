@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AcademyOS | Teacher dashboard</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/pages.css" />
+    <script src="../script.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="teacher-dashboard.html"
+        >Riazul Jannah Model School</a
+      >
+      <div class="user-area">Teacher</div>
+    </header>
+
+    <div class="app-layout">
+      <nav class="sidebar" aria-label="Main navigation">
+        <a class="nav-link active" href="teacher-dashboard.html">Dashboard</a>
+        <a class="nav-link" href="students.html">My students</a>
+        <a class="nav-link" href="attendance.html">Attendance</a>
+        <a class="nav-link" href="academics.html">Timetable</a>
+      </nav>
+
+      <main class="main-content">
+        <section class="page-heading">
+          <p class="eyebrow">TEACHER WORKSPACE</p>
+          <h1>Dashboard</h1>
+          <p>Your classes and today's schedule.</p>
+        </section>
+
+        <section class="summary-grid" aria-label="Teacher summary">
+          <article class="summary-card">
+            <h2>My classes</h2>
+            <p class="summary-value">3</p>
+          </article>
+          <article class="summary-card">
+            <h2>My students</h2>
+            <p class="summary-value">92</p>
+          </article>
+          <article class="summary-card">
+            <h2>Periods today</h2>
+            <p class="summary-value">4</p>
+          </article>
+          <article class="summary-card">
+            <h2>Attendance pending</h2>
+            <p class="summary-value leave">1</p>
+          </article>
+        </section>
+
+        <section class="dashboard-grid">
+          <article class="content-panel">
+            <h2 class="panel-title">Today's schedule</h2>
+            <p class="panel-note">
+              Mark attendance for each class after the period starts.
+            </p>
+            <div class="table-scroll">
+              <table class="students-table">
+                <thead>
+                  <tr>
+                    <th>PERIOD</th>
+                    <th>CLASS</th>
+                    <th>SUBJECT</th>
+                    <th>ACTION</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>Grade 8 · A</td>
+                    <td><span class="subject-chip">Maths</span></td>
+                    <td>
+                      <a class="row-action" href="attendance.html"
+                        >Mark attendance</a
+                      >
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>Grade 8 · B</td>
+                    <td><span class="subject-chip">Maths</span></td>
+                    <td>
+                      <a class="row-action" href="attendance.html"
+                        >Mark attendance</a
+                      >
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td>Grade 9 · A</td>
+                    <td><span class="subject-chip">Maths</span></td>
+                    <td>
+                      <a class="row-action" href="attendance.html"
+                        >Mark attendance</a
+                      >
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="content-panel">
+            <h2 class="panel-title">Notices</h2>
+            <ul class="activity-list">
+              <li>Grade 9 · A attendance not marked<small>Yesterday</small></li>
+              <li>
+                Mid-term marks entry opens Monday<small
+                  >From the administrator</small
+                >
+              </li>
+            </ul>
+          </article>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

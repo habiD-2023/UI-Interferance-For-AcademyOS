@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AcademyOS | Academics</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/pages.css" />
+    <script src="../script.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="../index.html">Riazul Jannah Model School</a>
+      <div class="user-area">Administrator</div>
+    </header>
+
+    <div class="app-layout">
+      <nav class="sidebar" aria-label="Main navigation">
+        <a class="nav-link" href="../index.html">Dashboard</a>
+        <a class="nav-link" href="students.html">Students</a>
+        <a class="nav-link" href="attendance.html">Attendance</a>
+        <a class="nav-link" href="fees.html">Fees</a>
+        <a class="nav-link active" href="academics.html">Academics</a>
+        <a class="nav-link" href="staff.html">Staff</a>
+        <a class="nav-link" href="reports.html">Reports</a>
+      </nav>
+
+      <main class="main-content">
+        <section class="page-heading">
+          <p class="eyebrow">ACADEMIC SETUP</p>
+          <h1>Academics</h1>
+          <p>Manage classes, subjects and the weekly timetable.</p>
+        </section>
+
+        <section class="summary-grid spaced" aria-label="Academic summary">
+          <article class="summary-card">
+            <h2>Classes</h2>
+            <p class="summary-value">5</p>
+          </article>
+          <article class="summary-card">
+            <h2>Sections</h2>
+            <p class="summary-value">10</p>
+          </article>
+          <article class="summary-card">
+            <h2>Subjects</h2>
+            <p class="summary-value">9</p>
+          </article>
+          <article class="summary-card">
+            <h2>Periods per day</h2>
+            <p class="summary-value">6</p>
+          </article>
+        </section>
+
+        <section class="content-panel compact">
+          <div class="students-heading">
+            <div>
+              <h2>Classes and sections</h2>
+              <p>Class teachers and enrolment.</p>
+            </div>
+            <a class="add-button" href="#">+ Add class</a>
+          </div>
+          <div class="table-scroll">
+            <table class="students-table">
+              <thead>
+                <tr>
+                  <th>CLASS</th>
+                  <th>SECTION</th>
+                  <th>CLASS TEACHER</th>
+                  <th>STUDENTS</th>
+                  <th>ACTION</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Grade 8</td>
+                  <td>A</td>
+                  <td>Mr Imran Khan</td>
+                  <td>32</td>
+                  <td><a class="row-action" href="#">Edit</a></td>
+                </tr>
+                <tr>
+                  <td>Grade 8</td>
+                  <td>B</td>
+                  <td>Ms Sadia Noor</td>
+                  <td>30</td>
+                  <td><a class="row-action" href="#">Edit</a></td>
+                </tr>
+                <tr>
+                  <td>Grade 9</td>
+                  <td>A</td>
+                  <td>Mr Farhan Ali</td>
+                  <td>28</td>
+                  <td><a class="row-action" href="#">Edit</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="content-panel compact">
+          <div class="students-heading">
+            <div>
+              <h2>Weekly timetable</h2>
+              <p>Grade 8 · A</p>
+            </div>
+            <a class="cancel-button" href="#">Edit timetable</a>
+          </div>
+          <div class="table-scroll">
+            <table class="students-table timetable">
+              <thead>
+                <tr>
+                  <th>PERIOD</th>
+                  <th>MON</th>
+                  <th>TUE</th>
+                  <th>WED</th>
+                  <th>THU</th>
+                  <th>FRI</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td><span class="subject-chip">Maths</span></td>
+                  <td><span class="subject-chip">English</span></td>
+                  <td><span class="subject-chip">Physics</span></td>
+                  <td><span class="subject-chip">Urdu</span></td>
+                  <td><span class="subject-chip">Maths</span></td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td><span class="subject-chip">English</span></td>
+                  <td><span class="subject-chip">Maths</span></td>
+                  <td><span class="subject-chip">Computer</span></td>
+                  <td><span class="subject-chip">Physics</span></td>
+                  <td><span class="subject-chip">Islamiat</span></td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td><span class="subject-chip">Urdu</span></td>
+                  <td><span class="subject-chip">Chemistry</span></td>
+                  <td><span class="subject-chip">Maths</span></td>
+                  <td><span class="subject-chip">English</span></td>
+                  <td><span class="subject-chip">Chemistry</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

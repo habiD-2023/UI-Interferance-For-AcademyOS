@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AcademyOS | Fees</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/pages.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="../index.html">Riazul Jannah Model School</a>
+      <div class="user-area">Administrator</div>
+    </header>
+
+    <div class="app-layout">
+      <nav class="sidebar" aria-label="Main navigation">
+        <a class="nav-link" href="../index.html">Dashboard</a>
+        <a class="nav-link" href="students.html">Students</a>
+        <a class="nav-link" href="attendance.html">Attendance</a>
+        <a class="nav-link active" href="fees.html">Fees</a>
+        <a class="nav-link" href="academics.html">Academics</a>
+        <a class="nav-link" href="staff.html">Staff</a>
+        <a class="nav-link" href="reports.html">Reports</a>
+      </nav>
+
+      <main class="main-content">
+        <section class="page-heading">
+          <p class="eyebrow">FINANCE</p>
+          <h1>Fees</h1>
+          <p>Track fee collection and follow up on pending payments.</p>
+        </section>
+
+        <section class="summary-grid spaced" aria-label="Fee summary">
+          <article class="summary-card">
+            <h2>Collected this month</h2>
+            <p class="summary-value">Rs. 480,000</p>
+          </article>
+          <article class="summary-card">
+            <h2>Pending</h2>
+            <p class="summary-value leave">Rs. 120,000</p>
+          </article>
+          <article class="summary-card">
+            <h2>Overdue</h2>
+            <p class="summary-value absent">Rs. 45,000</p>
+          </article>
+          <article class="summary-card">
+            <h2>Students paid</h2>
+            <p class="summary-value present">86%</p>
+          </article>
+        </section>
+
+        <section class="content-panel">
+          <div class="students-heading">
+            <div>
+              <h2>Fee records</h2>
+              <p>November 2026</p>
+            </div>
+            <a class="add-button" href="#">+ Record payment</a>
+          </div>
+
+          <form class="toolbar">
+            <div class="form-field grow">
+              <label for="fee-search">Search</label>
+              <input
+                id="fee-search"
+                type="search"
+                placeholder="Student name or admission ID"
+              />
+            </div>
+            <div class="form-field">
+              <label for="fee-class">Class</label>
+              <select id="fee-class">
+                <option>All classes</option>
+                <option>Grade 8</option>
+                <option>Grade 9</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="fee-status">Status</label>
+              <select id="fee-status">
+                <option>All</option>
+                <option>Paid</option>
+                <option>Pending</option>
+                <option>Overdue</option>
+              </select>
+            </div>
+          </form>
+
+          <div class="table-scroll">
+            <table class="students-table">
+              <thead>
+                <tr>
+                  <th>STUDENT</th>
+                  <th>ADMISSION ID</th>
+                  <th>CLASS</th>
+                  <th>AMOUNT</th>
+                  <th>DUE DATE</th>
+                  <th>STATUS</th>
+                  <th>ACTION</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Ayesha Khan</td>
+                  <td>STU-001</td>
+                  <td>Grade 8 · A</td>
+                  <td class="amount">Rs. 5,000</td>
+                  <td>10 Nov 2026</td>
+                  <td><span class="badge paid">Paid</span></td>
+                  <td><a class="row-action" href="#">View receipt</a></td>
+                </tr>
+                <tr>
+                  <td>Bilal Ahmad</td>
+                  <td>STU-002</td>
+                  <td>Grade 8 · A</td>
+                  <td class="amount">Rs. 5,000</td>
+                  <td>10 Nov 2026</td>
+                  <td><span class="badge pending">Pending</span></td>
+                  <td><a class="row-action" href="#">Record payment</a></td>
+                </tr>
+                <tr>
+                  <td>Hamza Ali</td>
+                  <td>STU-003</td>
+                  <td>Grade 9 · B</td>
+                  <td class="amount">Rs. 5,500</td>
+                  <td>10 Oct 2026</td>
+                  <td><span class="badge overdue">Overdue</span></td>
+                  <td><a class="row-action" href="#">Send reminder</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

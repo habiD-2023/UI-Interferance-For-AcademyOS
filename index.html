@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AcademyOS | Dashboard</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="script.js" defer></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"
+      defer
+    ></script>
+    <script src="charts.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="index.html">
+        <img src="Assets/logo.jpg" alt="" />
+        <span class="brand-text">
+          <a class="brand" href="index.html">Riazul Jannah Model School</a>
+        </span>
+      </a>
+
+      <div class="user-area">Administrator</div>
+    </header>
+
+    <div class="app-layout">
+      <nav class="sidebar" aria-label="Main navigation">
+        <a class="nav-link active" href="index.html">Dashboard</a>
+        <a class="nav-link" href="pages/students.html">Students</a>
+        <a class="nav-link" href="pages/attendance.html">Attendance</a>
+        <a class="nav-link" href="pages/fees.html">Fees</a>
+        <a class="nav-link" href="pages/academics.html">Academics</a>
+        <a class="nav-link" href="pages/staff.html">Staff</a>
+        <a class="nav-link" href="pages/reports.html">Reports</a>
+      </nav>
+
+      <main class="main-content">
+        <section class="page-heading">
+          <p class="eyebrow">ACADEMY OVERVIEW</p>
+          <h1>Dashboard</h1>
+          <p>Welcome to your academy management workspace.</p>
+        </section>
+
+        <section class="summary-grid" aria-label="Academy summary">
+          <article class="summary-card">
+            <h2>Total students</h2>
+            <p class="summary-value">412</p>
+          </article>
+          <article class="summary-card">
+            <h2>Attendance today</h2>
+            <p class="summary-value">94%</p>
+          </article>
+          <article class="summary-card">
+            <h2>Fees collected</h2>
+            <p class="summary-value">Rs. 480,000</p>
+          </article>
+          <article class="summary-card">
+            <h2>Pending fees</h2>
+            <p class="summary-value">Rs. 120,000</p>
+          </article>
+        </section>
+
+        <section class="dashboard-grid">
+          <article class="content-panel">
+            <h2 class="panel-title">Attendance this week</h2>
+            <p class="panel-note">Percentage of students present each day.</p>
+            <div class="chart-box"><canvas id="attendanceChart"></canvas></div>
+          </article>
+
+          <article class="content-panel">
+            <h2 class="panel-title">Fee status</h2>
+            <p class="panel-note">Collected, pending and overdue.</p>
+            <div class="chart-box"><canvas id="feeStatusChart"></canvas></div>
+          </article>
+        </section>
+
+        <section class="dashboard-grid">
+          <article class="content-panel">
+            <h2 class="panel-title">Students per class</h2>
+            <div class="chart-box"><canvas id="classChart"></canvas></div>
+          </article>
+
+          <article class="content-panel">
+            <h2 class="panel-title">Monthly fee collection</h2>
+            <div class="chart-box"><canvas id="monthlyFeeChart"></canvas></div>
+          </article>
+        </section>
+
+        <section class="content-panel">
+          <h2 class="panel-title">Recent activity</h2>
+          <ul class="activity-list">
+            <li>
+              New student admitted: Ayesha Khan<small>Today, 9:15 AM</small>
+            </li>
+            <li>Fee received from Bilal Ahmad<small>Today, 8:40 AM</small></li>
+            <li>Grade 8 · A attendance saved<small>Yesterday</small></li>
+            <li>Staff member added: Sadia Noor<small>2 days ago</small></li>
+          </ul>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

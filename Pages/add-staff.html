@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AcademyOS | Add staff</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/pages.css" />
+    <script src="../script.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="../index.html">Riazul Jannah Model School</a>
+      <div class="user-area">Administrator</div>
+    </header>
+
+    <div class="app-layout">
+      <nav class="sidebar" aria-label="Main navigation">
+        <a class="nav-link" href="../index.html">Dashboard</a>
+        <a class="nav-link" href="students.html">Students</a>
+        <a class="nav-link" href="attendance.html">Attendance</a>
+        <a class="nav-link" href="fees.html">Fees</a>
+        <a class="nav-link" href="academics.html">Academics</a>
+        <a class="nav-link active" href="staff.html">Staff</a>
+        <a class="nav-link" href="reports.html">Reports</a>
+      </nav>
+
+      <main class="main-content">
+        <section class="page-heading">
+          <p class="eyebrow">STAFF MANAGEMENT</p>
+          <h1>Add staff</h1>
+          <p>Enter the staff member's personal and job details.</p>
+        </section>
+
+        <form class="student-form">
+          <section class="form-section">
+            <h2>Personal information</h2>
+            <div class="form-grid">
+              <div class="form-field">
+                <label for="staff-name">Full name</label
+                ><input
+                  id="staff-name"
+                  name="staff-name"
+                  type="text"
+                  placeholder="e.g. Imran Khan"
+                />
+              </div>
+              <div class="form-field">
+                <label for="staff-id">Staff ID</label
+                ><input
+                  id="staff-id"
+                  name="staff-id"
+                  type="text"
+                  placeholder="e.g. STF-2026-001"
+                />
+              </div>
+              <div class="form-field">
+                <label for="staff-phone">Phone number</label
+                ><input
+                  id="staff-phone"
+                  name="staff-phone"
+                  type="tel"
+                  placeholder="03XX-XXXXXXX"
+                />
+              </div>
+              <div class="form-field">
+                <label for="staff-email">Email address</label
+                ><input
+                  id="staff-email"
+                  name="staff-email"
+                  type="email"
+                  placeholder="name@example.com"
+                />
+              </div>
+            </div>
+          </section>
+
+          <section class="form-section">
+            <h2>Job information</h2>
+            <div class="form-grid">
+              <div class="form-field">
+                <label for="staff-role-select">Role</label
+                ><select id="staff-role-select" name="staff-role-select">
+                  <option>Teacher</option>
+                  <option>Admin</option>
+                  <option>Accountant</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="staff-subject">Subject (teachers)</label
+                ><select id="staff-subject" name="staff-subject">
+                  <option>Maths</option>
+                  <option>English</option>
+                  <option>Physics</option>
+                  <option>Chemistry</option>
+                  <option>Urdu</option>
+                  <option>Computer</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="staff-joined">Joining date</label
+                ><input
+                  id="staff-joined"
+                  name="staff-joined"
+                  type="date"
+                  placeholder=""
+                />
+              </div>
+              <div class="form-field">
+                <label for="staff-status">Status</label
+                ><select id="staff-status" name="staff-status">
+                  <option>Active</option>
+                  <option>On leave</option>
+                  <option>Inactive</option>
+                </select>
+              </div>
+            </div>
+          </section>
+
+          <div class="form-actions">
+            <a class="cancel-button" href="staff.html">Cancel</a>
+            <button class="add-button" type="submit">Save staff</button>
+          </div>
+        </form>
+      </main>
+    </div>
+  </body>
+</html>

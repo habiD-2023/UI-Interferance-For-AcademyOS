@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AcademyOS | Add student</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <script src="../script.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="../index.html">Riazul Jannah Model School</a>
+      <div class="user-area">Administrator</div>
+    </header>
+
+    <div class="app-layout">
+      <nav class="sidebar" aria-label="Main navigation">
+        <a class="nav-link" href="../index.html">Dashboard</a>
+        <a class="nav-link active" href="students.html">Students</a>
+        <a class="nav-link" href="attendance.html">Attendance</a>
+        <a class="nav-link" href="fees.html">Fees</a>
+        <a class="nav-link" href="academics.html">Academics</a>
+        <a class="nav-link" href="staff.html">Staff</a>
+        <a class="nav-link" href="reports.html">Reports</a>
+      </nav>
+
+      <main class="main-content">
+        <section class="page-heading">
+          <p class="eyebrow">STUDENT MANAGEMENT</p>
+          <h1>Add student</h1>
+          <p>Enter the student and guardian details below.</p>
+        </section>
+
+        <form class="student-form">
+          <section class="form-section">
+            <h2>Student information</h2>
+
+            <div class="form-grid">
+              <div class="form-field">
+                <label for="student-name">Student full name</label>
+                <input
+                  id="student-name"
+                  name="studentName"
+                  type="text"
+                  placeholder="e.g. Ayesha Khan"
+                  required
+                />
+              </div>
+
+              <div class="form-field">
+                <label for="admission-number">Admission number</label>
+                <input
+                  id="admission-number"
+                  name="admissionNumber"
+                  type="text"
+                  placeholder="e.g. STU-2026-001"
+                  required
+                />
+              </div>
+
+              <div class="form-field">
+                <label for="date-of-birth">Date of birth</label>
+                <input
+                  id="date-of-birth"
+                  name="dateOfBirth"
+                  type="date"
+                  required
+                />
+              </div>
+
+              <div class="form-field">
+                <label for="class">Class</label>
+                <select id="class" name="class" required>
+                  <option value="">Select a class</option>
+                  <option value="grade-6">Grade 6</option>
+                  <option value="grade-7">Grade 7</option>
+                  <option value="grade-8">Grade 8</option>
+                  <option value="grade-9">Grade 9</option>
+                  <option value="grade-10">Grade 10</option>
+                </select>
+              </div>
+
+              <div class="form-field">
+                <label for="section">Section</label>
+                <select id="section" name="section" required>
+                  <option value="">Select a section</option>
+                  <option value="a">A</option>
+                  <option value="b">B</option>
+                </select>
+              </div>
+
+              <div class="form-field">
+                <label for="gender">Gender</label>
+                <select id="gender" name="gender" required>
+                  <option value="">Select gender</option>
+                  <option value="female">Female</option>
+                  <option value="male">Male</option>
+                </select>
+              </div>
+            </div>
+          </section>
+
+          <section class="form-section">
+            <h2>Guardian information</h2>
+
+            <div class="form-grid">
+              <div class="form-field">
+                <label for="guardian-name">Guardian full name</label>
+                <input
+                  id="guardian-name"
+                  name="guardianName"
+                  type="text"
+                  placeholder="e.g. Ahmed Khan"
+                  required
+                />
+              </div>
+
+              <div class="form-field">
+                <label for="guardian-phone">Guardian phone number</label>
+                <input
+                  id="guardian-phone"
+                  name="guardianPhone"
+                  type="tel"
+                  placeholder="e.g. 03XX-XXXXXXX"
+                  required
+                />
+              </div>
+            </div>
+          </section>
+
+          <div class="form-actions">
+            <a class="cancel-button" href="students.html">Cancel</a>
+            <button class="add-button" type="submit">Save student</button>
+          </div>
+        </form>
+      </main>
+    </div>
+  </body>
+</html>

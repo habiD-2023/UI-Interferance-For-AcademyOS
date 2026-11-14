@@ -1,0 +1,434 @@
+(function () {
+  "use strict";
+
+  /* ---------- Helpers ---------- */
+  const $ = (selector, root) => (root || document).querySelector(selector);
+  const $$ = (selector, root) =>
+    Array.from((root || document).querySelectorAll(selector));
+
+  function readStore(key) {
+    try {
+      return JSON.parse(localStorage.getItem(key)) || [];
+    } catch (e) {
+      return [];
+    }
+  }
+  function writeStore(key, value) {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+    } catch (e) {
+      /* storage unavailable */
+    }
+  }
+
+  function showMessage(text, type) {
+    const box = document.createElement("div");
+    box.setAttribute("role", "status");
+    box.textContent = text;
+    box.style.cssText =
+      "position:fixed;right:20px;bottom:20px;z-index:50;max-width:320px;padding:12px 16px;" +
+      "border-radius:8px;color:#fff;font-size:14px;font-weight:700;box-shadow:0 4px 14px rgba(0,0,0,.15);" +
+      "background:" +
+      (type === "error" ? "#c0392b" : "#248453");
+    document.body.appendChild(box);
+    setTimeout(() => box.remove(), 3200);
+  }
+
+  function cellText(row, index) {
+    return row.cells[index]
+      ? row.cells[index].textContent.trim().toLowerCase()
+      : "";
+  }
+
+  function td(text) {
+    const cell = document.createElement("td");
+    cell.textContent = text;
+    return cell;
+  }
+  function badgeCell(text, className) {
+    const cell = document.createElement("td");
+    const span = document.createElement("span");
+    span.className = className;
+    span.textContent = text;
+    cell.appendChild(span);
+    return cell;
+  }
+  function actionCell() {
+    const cell = document.createElement("td");
+    ["View", "Edit"].forEach((label, i) => {
+      const a = document.createElement("a");
+      a.className = "row-action";
+      a.href = "#";
+      a.textContent = label;
+      cell.appendChild(a);
+      if (i === 0) cell.appendChild(document.createTextNode(" \u00a0 "));
+    });
+    return cell;
+  }
+
+  // Filter forms in the toolbar should never reload the page.
+  $$(".toolbar").forEach((form) =>
+    form.addEventListener("submit", (e) => e.preventDefault()),
+  );
+
+  // Show a message saved before a redirect (for example "Student saved").
+  try {
+    const flash = localStorage.getItem("academyos_flash");
+    if (flash) {
+      localStorage.removeItem("academyos_flash");
+      showMessage(flash);
+    }
+  } catch (e) {
+    /* ignore */
+  }
+
+  /* ---------- 1. Login redirect ---------- */
+  const loginForm = $(".login-card form");
+  if (loginForm) {
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const role = $("#role").value;
+      // Prototype only: real authentication comes from the backend later.
+      try {
+        localStorage.setItem("academyos_role", role);
+      } catch (err) {
+        /* ignore */
+      }
+      window.location.href =
+        role === "teacher" ? "pages/teacher-dashboard.html" : "index.html";
+    });
+  }
+
+  /* ---------- 2. Search and filters (Students, Staff, Fees) ---------- */
+  function setupFilter(config) {
+    const search = $(config.search);
+    if (!search) return;
+    const selects = config.selects.map((s) => ({
+      el: $(s.selector),
+      column: s.column,
+      all: s.all,
+    }));
+    const tbody = $(".students-table tbody");
+    if (!tbody) return;
+
+    function apply() {
+      const term = search.value.trim().toLowerCase();
+      let visible = 0;
+      $$("tr", tbody).forEach((row) => {
+        if (row.dataset.empty) return;
+        const textMatch =
+          !term ||
+          config.searchColumns.some((c) => cellText(row, c).includes(term));
+        const selectMatch = selects.every((s) => {
+          if (!s.el) return true;
+          const value = s.el.value.toLowerCase();
+          return value === s.all || cellText(row, s.column).includes(value);
+        });
+        const show = textMatch && selectMatch;
+        row.hidden = !show;
+        if (show) visible++;
+      });
+      showEmptyRow(tbody, visible === 0, config.columns);
+    }
+
+    search.addEventListener("input", apply);
+    selects.forEach((s) => s.el && s.el.addEventListener("change", apply));
+  }
+
+  function showEmptyRow(tbody, isEmpty, columns) {
+    let row = $("tr[data-empty]", tbody);
+    if (isEmpty && !row) {
+      row = document.createElement("tr");
+      row.dataset.empty = "true";
+      const cell = td(
+        "No records match your search. Clear the filters to see all records.",
+      );
+      cell.colSpan = columns;
+      row.appendChild(cell);
+      tbody.appendChild(row);
+    } else if (!isEmpty && row) {
+      row.remove();
+    }
+  }
+
+  setupFilter({
+    search: "#stu-search",
+    searchColumns: [0, 1],
+    columns: 5,
+    selects: [
+      { selector: "#stu-class", column: 2, all: "all classes" },
+      { selector: "#stu-status", column: 3, all: "all" },
+    ],
+  });
+  setupFilter({
+    search: "#staff-search",
+    searchColumns: [0, 1],
+    columns: 7,
+    selects: [{ selector: "#staff-role", column: 2, all: "all roles" }],
+  });
+  setupFilter({
+    search: "#fee-search",
+    searchColumns: [0, 1],
+    columns: 7,
+    selects: [
+      { selector: "#fee-class", column: 2, all: "all classes" },
+      { selector: "#fee-status", column: 5, all: "all" },
+    ],
+  });
+
+  /* ---------- 3. Fees: record a payment ---------- */
+  const feeTable = $("#fee-search") ? $(".students-table tbody") : null;
+  if (feeTable) {
+    feeTable.addEventListener("click", (e) => {
+      const link = e.target.closest(".row-action");
+      if (!link) return;
+      e.preventDefault();
+      const row = link.closest("tr");
+      const action = link.textContent.trim().toLowerCase();
+      const badge = $(".badge", row);
+      if (!badge) return;
+
+      if (action === "record payment") {
+        badge.className = "badge paid";
+        badge.textContent = "Paid";
+        link.textContent = "View receipt";
+        showMessage("Payment recorded for " + row.cells[0].textContent.trim());
+      } else if (action === "send reminder") {
+        showMessage("Reminder sent to " + row.cells[0].textContent.trim());
+      } else if (action === "view receipt") {
+        showMessage("Receipt will open here once the backend is connected.");
+      }
+    });
+  }
+
+  /* ---------- 4. Attendance ---------- */
+  const attDate = $("#att-date");
+  if (attDate) {
+    const attTable = $(".students-table tbody");
+    const counters = $$(".summary-grid .summary-value"); // total, present, absent, leave
+    const classSelect = $("#att-class");
+    const sectionSelect = $("#att-section");
+    const radios = () => $$('input[type="radio"]', attTable);
+
+    if (!attDate.value) attDate.value = new Date().toISOString().slice(0, 10);
+
+    const storageKey = () =>
+      "academyos_attendance_" +
+      attDate.value +
+      "_" +
+      classSelect.value +
+      "_" +
+      sectionSelect.value;
+
+    function updateCounts() {
+      const rows = $$("tr", attTable);
+      const checked = (value) =>
+        radios().filter((r) => r.checked && r.value === value).length;
+      if (counters.length >= 4) {
+        counters[0].textContent = rows.length;
+        counters[1].textContent = checked("present");
+        counters[2].textContent = checked("absent");
+        counters[3].textContent = checked("leave");
+      }
+    }
+
+    function restoreSaved() {
+      let saved = {};
+      try {
+        saved = JSON.parse(localStorage.getItem(storageKey())) || {};
+      } catch (e) {
+        saved = {};
+      }
+      if (!Object.keys(saved).length) return false;
+      radios().forEach((r) => {
+        r.checked = saved[r.name] === r.value;
+      });
+      return true;
+    }
+
+    attTable.addEventListener("change", updateCounts);
+
+    const footerButtons = $$(".panel-footer button");
+    const markAll = footerButtons.find((b) =>
+      /mark all present/i.test(b.textContent),
+    );
+    const save = footerButtons.find((b) =>
+      /save attendance/i.test(b.textContent),
+    );
+
+    if (markAll) {
+      markAll.addEventListener("click", () => {
+        radios().forEach((r) => {
+          r.checked = r.value === "present";
+        });
+        updateCounts();
+      });
+    }
+
+    if (save) {
+      save.addEventListener("click", () => {
+        const data = {};
+        radios().forEach((r) => {
+          if (r.checked) data[r.name] = r.value;
+        });
+        const rows = $$("tr", attTable).length;
+        if (Object.keys(data).length < rows) {
+          showMessage("Mark every student before saving.", "error");
+          return;
+        }
+        try {
+          localStorage.setItem(storageKey(), JSON.stringify(data));
+        } catch (e) {
+          /* ignore */
+        }
+        showMessage("Attendance saved for " + attDate.value);
+      });
+    }
+
+    // "Load students" button: reload any saved attendance for the chosen date, class and section.
+    const toolbar = $(".toolbar");
+    if (toolbar) {
+      toolbar.addEventListener("submit", () => {
+        radios().forEach((r) => {
+          r.checked = false;
+        });
+        if (restoreSaved()) showMessage("Saved attendance loaded.");
+        updateCounts();
+      });
+    }
+
+    restoreSaved();
+    updateCounts();
+  }
+
+  /* ---------- 5. Add student / Add staff ---------- */
+  const phonePattern = /^03\d{2}-?\d{7}$/;
+
+  function selectedText(select) {
+    return select.options[select.selectedIndex].text;
+  }
+
+  const studentForm = $("#student-name") ? $(".student-form") : null;
+  if (studentForm) {
+    studentForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const phone = $("#guardian-phone");
+      if (!phonePattern.test(phone.value.trim())) {
+        showMessage(
+          "Enter a valid phone number, for example 0300-1234567.",
+          "error",
+        );
+        phone.focus();
+        return;
+      }
+      const students = readStore("academyos_students");
+      const admission = $("#admission-number").value.trim();
+      if (
+        students.some(
+          (s) => s.admission.toLowerCase() === admission.toLowerCase(),
+        )
+      ) {
+        showMessage("This admission number is already used.", "error");
+        $("#admission-number").focus();
+        return;
+      }
+      students.push({
+        name: $("#student-name").value.trim(),
+        admission: admission,
+        className: selectedText($("#class")),
+        section: $("#section") ? selectedText($("#section")) : "",
+      });
+      writeStore("academyos_students", students);
+      try {
+        localStorage.setItem("academyos_flash", "Student saved");
+      } catch (err) {
+        /* ignore */
+      }
+      window.location.href = "students.html";
+    });
+  }
+
+  const staffForm = $("#staff-name") ? $(".student-form") : null;
+  if (staffForm) {
+    staffForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const phone = $("#staff-phone");
+      if (!phonePattern.test(phone.value.trim())) {
+        showMessage(
+          "Enter a valid phone number, for example 0300-1234567.",
+          "error",
+        );
+        phone.focus();
+        return;
+      }
+      const staff = readStore("academyos_staff");
+      const staffId = $("#staff-id").value.trim();
+      if (
+        staff.some((s) => s.staffId.toLowerCase() === staffId.toLowerCase())
+      ) {
+        showMessage("This staff ID is already used.", "error");
+        $("#staff-id").focus();
+        return;
+      }
+      const role = selectedText($("#staff-role-select"));
+      staff.push({
+        name: $("#staff-name").value.trim(),
+        staffId: staffId,
+        role: role,
+        subject:
+          role === "Teacher" ? selectedText($("#staff-subject")) : "\u2014",
+        phone: phone.value.trim(),
+        status: selectedText($("#staff-status")),
+      });
+      writeStore("academyos_staff", staff);
+      try {
+        localStorage.setItem("academyos_flash", "Staff member saved");
+      } catch (err) {
+        /* ignore */
+      }
+      window.location.href = "staff.html";
+    });
+  }
+
+  /* ---------- 6. Show saved students and staff in their tables ---------- */
+  if ($("#stu-search")) {
+    const tbody = $(".students-table tbody");
+    readStore("academyos_students").forEach((s) => {
+      const row = document.createElement("tr");
+      row.appendChild(td(s.name));
+      row.appendChild(td(s.admission));
+      row.appendChild(
+        td(s.section ? s.className + " \u00b7 " + s.section : s.className),
+      );
+      row.appendChild(badgeCell("Active", "student-status"));
+      row.appendChild(actionCell());
+      tbody.appendChild(row);
+    });
+  }
+
+  if ($("#staff-search")) {
+    const tbody = $(".students-table tbody");
+    const statusClass = {
+      Active: "badge paid",
+      "On leave": "badge pending",
+      Inactive: "badge overdue",
+    };
+    readStore("academyos_staff").forEach((s) => {
+      const row = document.createElement("tr");
+      row.appendChild(td(s.name));
+      row.appendChild(td(s.staffId));
+      row.appendChild(td(s.role));
+      row.appendChild(td(s.subject));
+      row.appendChild(td(s.phone));
+      row.appendChild(badgeCell(s.status, statusClass[s.status] || "badge"));
+      const cell = document.createElement("td");
+      const a = document.createElement("a");
+      a.className = "row-action";
+      a.href = "#";
+      a.textContent = "Edit";
+      cell.appendChild(a);
+      row.appendChild(cell);
+      tbody.appendChild(row);
+    });
+  }
+})();

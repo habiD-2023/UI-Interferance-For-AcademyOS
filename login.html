@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AcademyOS | Sign in</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/pages.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body class="login-page">
+    <main class="login-card">
+      <a class="brand" href="login.html">AcademyOS</a>
+      <p>Sign in to manage your academy.</p>
+      <form>
+        <div class="form-field">
+          <label for="role">Sign in as</label>
+          <select id="role" name="role">
+            <option value="admin">Administrator</option>
+            <option value="teacher">Teacher</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="email">Email address</label>
+          <input id="email" name="email" type="email" placeholder="name@example.com" required />
+        </div>
+        <div class="form-field">
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" placeholder="Enter your password" required />
+        </div>
+        <button class="add-button" type="submit">Sign in</button>
+      </form>
+      <p class="login-note">Forgot your password? Contact your administrator.</p>
+    </main>
+  </body>
+</html>

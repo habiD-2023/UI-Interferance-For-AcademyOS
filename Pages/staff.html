@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AcademyOS | Staff</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/pages.css" />
+    <script src="../script.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="../index.html">Riazul Jannah Model School</a>
+      <div class="user-area">Administrator</div>
+    </header>
+
+    <div class="app-layout">
+      <nav class="sidebar" aria-label="Main navigation">
+        <a class="nav-link" href="../index.html">Dashboard</a>
+        <a class="nav-link" href="students.html">Students</a>
+        <a class="nav-link" href="attendance.html">Attendance</a>
+        <a class="nav-link" href="fees.html">Fees</a>
+        <a class="nav-link" href="academics.html">Academics</a>
+        <a class="nav-link active" href="staff.html">Staff</a>
+        <a class="nav-link" href="reports.html">Reports</a>
+      </nav>
+
+      <main class="main-content">
+        <section class="page-heading">
+          <p class="eyebrow">ACADEMY MANAGEMENT</p>
+          <h1>Staff</h1>
+          <p>View and manage teachers and office staff.</p>
+        </section>
+
+        <section class="content-panel">
+          <div class="students-heading">
+            <div>
+              <h2>Staff directory</h2>
+              <p>All active and inactive staff members.</p>
+            </div>
+            <a class="add-button" href="add-staff.html">+ Add staff</a>
+          </div>
+          <form class="toolbar">
+            <div class="form-field grow">
+              <label for="staff-search">Search</label
+              ><input
+                id="staff-search"
+                type="search"
+                placeholder="Name or staff ID"
+              />
+            </div>
+            <div class="form-field">
+              <label for="staff-role">Role</label
+              ><select id="staff-role">
+                <option>All roles</option>
+                <option>Teacher</option>
+                <option>Admin</option>
+                <option>Accountant</option>
+              </select>
+            </div>
+          </form>
+          <div class="table-scroll">
+            <table class="students-table">
+              <thead>
+                <tr>
+                  <th>STAFF MEMBER</th>
+                  <th>STAFF ID</th>
+                  <th>ROLE</th>
+                  <th>SUBJECT</th>
+                  <th>PHONE</th>
+                  <th>STATUS</th>
+                  <th>ACTION</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Imran Khan</td>
+                  <td>STF-001</td>
+                  <td>Teacher</td>
+                  <td>Maths</td>
+                  <td>03XX-XXXXXXX</td>
+                  <td><span class="badge paid">Active</span></td>
+                  <td><a class="row-action" href="#">Edit</a></td>
+                </tr>
+                <tr>
+                  <td>Sadia Noor</td>
+                  <td>STF-002</td>
+                  <td>Teacher</td>
+                  <td>English</td>
+                  <td>03XX-XXXXXXX</td>
+                  <td><span class="badge paid">Active</span></td>
+                  <td><a class="row-action" href="#">Edit</a></td>
+                </tr>
+                <tr>
+                  <td>Farhan Ali</td>
+                  <td>STF-003</td>
+                  <td>Accountant</td>
+                  <td>—</td>
+                  <td>03XX-XXXXXXX</td>
+                  <td><span class="badge pending">On leave</span></td>
+                  <td><a class="row-action" href="#">Edit</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
