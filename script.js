@@ -432,7 +432,7 @@
     });
   }
   /* ---------- 7. Time-based greeting ---------- */
-   /* ---------- 7. Time-based greeting ---------- */
+  /* ---------- 7. Time-based greeting ---------- */
   const greetTitle = $("[data-greeting-title]");
   if (greetTitle) {
     const now = new Date();
@@ -451,8 +451,46 @@
     const greetDate = $("[data-greeting-date]");
     if (greetDate) {
       greetDate.textContent = now.toLocaleDateString("en-GB", {
-        weekday: "long", day: "numeric", month: "long", year: "numeric"
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric",
       });
     }
+  }
+  /* ---------- 8. Dark theme toggle ---------- */
+  const themeToggle = $(".theme-toggle");
+
+  function applyTheme(theme) {
+    document.documentElement.dataset.theme = theme;
+    if (themeToggle) {
+      themeToggle.textContent = theme === "dark" ? "☀️" : "🌙";
+      themeToggle.setAttribute(
+        "aria-label",
+        theme === "dark" ? "Switch to light theme" : "Switch to dark theme",
+      );
+    }
+  }
+
+  let savedTheme = "light";
+  try {
+    savedTheme = localStorage.getItem("academyos_theme") || "light";
+  } catch (e) {
+    /* ignore */
+  }
+  applyTheme(savedTheme);
+
+  if (themeToggle) {
+    themeToggle.addEventListener("click", () => {
+      const next =
+        document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+      applyTheme(next);
+      try {
+        localStorage.setItem("academyos_theme", next);
+      } catch (e) {
+        /* ignore */
+      }
+      if ($("canvas")) location.reload(); // redraw the dashboard charts in the new colors
+    });
   }
 })();

@@ -11,6 +11,7 @@
       defer
     ></script>
     <script src="charts.js" defer></script>
+    <script src="theme.js" defer></script>
   </head>
   <body>
     <header class="topbar">
@@ -21,7 +22,16 @@
         </span>
       </a>
 
-      <div class="user-area">Administrator</div>
+      <div class="topbar-actions">
+        <button
+          class="theme-toggle"
+          type="button"
+          aria-label="Switch to dark theme"
+        >
+          🌙
+        </button>
+        <div class="user-area">Administrator</div>
+      </div>
     </header>
 
     <div class="app-layout">
