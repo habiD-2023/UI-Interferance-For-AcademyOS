@@ -10,7 +10,10 @@
   </head>
   <body class="login-page">
     <main class="login-card">
-      <a class="brand" href="login.html">AcademyOS</a>
+      <a class="brand" href="login.html">
+        <img src="Assets/logo.jpg" alt="Riazul Jannah Model School" />
+        <span class="brand-text">Riazul Jannah Model School</span>
+      </a>
       <p>Sign in to manage your academy.</p>
       <form>
         <div class="form-field">
@@ -22,15 +25,32 @@
         </div>
         <div class="form-field">
           <label for="email">Email address</label>
-          <input id="email" name="email" type="email" placeholder="name@example.com" required />
+          <input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="name@example.com"
+            required
+          />
         </div>
         <div class="form-field">
           <label for="password">Password</label>
-          <input id="password" name="password" type="password" placeholder="Enter your password" required />
+          <input
+            id="password"
+            name="password"
+            type="password"
+            placeholder="Enter your password"
+            required
+          />
         </div>
-        <button class="add-button" type="submit">Sign in</button>
+        <div class="login-actions">
+          <button class="add-button" type="submit">Login</button>
+          <a class="cancel-button" href="signup.html">Sign up</a>
+        </div>
       </form>
-      <p class="login-note">Forgot your password? Contact your administrator.</p>
+      <p class="login-note">
+        <a href="#">Forget Password?</a>
+      </p>
     </main>
   </body>
 </html>

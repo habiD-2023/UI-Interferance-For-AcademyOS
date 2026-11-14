@@ -431,4 +431,28 @@
       tbody.appendChild(row);
     });
   }
+  /* ---------- 7. Time-based greeting ---------- */
+   /* ---------- 7. Time-based greeting ---------- */
+  const greetTitle = $("[data-greeting-title]");
+  if (greetTitle) {
+    const now = new Date();
+    const hour = now.getHours();
+    let part = "Good night";
+    if (hour >= 5 && hour < 12) part = "Good morning";
+    else if (hour >= 12 && hour < 17) part = "Good afternoon";
+    else if (hour >= 17 && hour < 21) part = "Good evening";
+
+    const name = document.createElement("span");
+    name.className = "greeting-name";
+    name.textContent = greetTitle.dataset.name;
+    greetTitle.textContent = part + ", ";
+    greetTitle.appendChild(name);
+
+    const greetDate = $("[data-greeting-date]");
+    if (greetDate) {
+      greetDate.textContent = now.toLocaleDateString("en-GB", {
+        weekday: "long", day: "numeric", month: "long", year: "numeric"
+      });
+    }
+  }
 })();
