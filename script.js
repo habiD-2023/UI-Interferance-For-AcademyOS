@@ -664,4 +664,79 @@
       });
     }
   })();
+  /* ===== User avatar menu (paste at the END of script.js, after the last block) ===== */
+  (function () {
+    "use strict";
+
+    var menu = document.querySelector(".user-menu");
+    if (!menu) return;
+
+    var button = menu.querySelector(".avatar-button");
+    var dropdown = menu.querySelector(".user-dropdown");
+    var logout = menu.querySelector("[data-logout]");
+    if (!button || !dropdown) return;
+
+    /* Fill in the signed-in user (saved by the login form) */
+    var current = null;
+    try {
+      current = JSON.parse(localStorage.getItem("academyos_current"));
+    } catch (e) {
+      current = null;
+    }
+
+    if (current && current.name) {
+      var nameEl = menu.querySelector("[data-user-name]");
+      var roleEl = menu.querySelector("[data-user-role]");
+      var initialsEl = menu.querySelector("[data-user-initials]");
+
+      if (nameEl) nameEl.textContent = current.name;
+      if (roleEl)
+        roleEl.textContent =
+          current.role === "teacher" ? "Teacher" : "Administrator";
+      if (initialsEl) {
+        var parts = current.name.trim().split(/\s+/);
+        var letters =
+          parts[0].charAt(0) +
+          (parts.length > 1 ? parts[parts.length - 1].charAt(0) : "");
+        initialsEl.textContent = letters.toUpperCase();
+      }
+    }
+
+    /* Open and close */
+    function setOpen(open) {
+      dropdown.hidden = !open;
+      button.setAttribute("aria-expanded", open ? "true" : "false");
+    }
+
+    button.addEventListener("click", function (e) {
+      e.stopPropagation();
+      setOpen(dropdown.hidden);
+    });
+
+    document.addEventListener("click", function (e) {
+      if (!menu.contains(e.target)) setOpen(false);
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && !dropdown.hidden) {
+        setOpen(false);
+        button.focus();
+      }
+    });
+
+    /* Logout: clear the session, keep saved accounts and the theme, go to the login page */
+    if (logout) {
+      logout.addEventListener("click", function () {
+        try {
+          localStorage.removeItem("academyos_current");
+          localStorage.removeItem("academyos_role");
+        } catch (e) {
+          /* ignore */
+        }
+        window.location.href = /\/pages\//i.test(window.location.pathname)
+          ? "../login.html"
+          : "login.html";
+      });
+    }
+  })();
 })();

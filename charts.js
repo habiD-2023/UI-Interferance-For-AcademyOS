@@ -8,7 +8,7 @@
     primary: "#354fc5",
     primarySoft: "#edf0ff",
     green: "#248453",
-    amber: "#b7791f",
+    amber: "#e8c00e",
     red: "#c0392b",
     grid: "#e8ecf2",
     text: "#778398",
