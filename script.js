@@ -493,4 +493,175 @@
       if ($("canvas")) location.reload(); // redraw the dashboard charts in the new colors
     });
   }
+
+  /* AcademyOS auth pages (login.html and signup.html).
+   PROTOTYPE ONLY: accounts live in this browser's localStorage and passwords are
+   neither stored nor checked. Real authentication will come from the backend. */
+  (function () {
+    "use strict";
+
+    var USERS_KEY = "academyos_users";
+    var phonePattern = /^03\d{2}-?\d{7}$/;
+    var roleNames = { admin: "an Administrator", teacher: "a Teacher" };
+
+    function readUsers() {
+      try {
+        return JSON.parse(localStorage.getItem(USERS_KEY)) || [];
+      } catch (e) {
+        return [];
+      }
+    }
+    function writeUsers(users) {
+      try {
+        localStorage.setItem(USERS_KEY, JSON.stringify(users));
+      } catch (e) {
+        /* ignore */
+      }
+    }
+    function setItem(key, value) {
+      try {
+        localStorage.setItem(key, value);
+      } catch (e) {
+        /* ignore */
+      }
+    }
+
+    function showError(form, message, field) {
+      var box = form.querySelector(".form-error");
+      if (box) {
+        box.textContent = message;
+        box.classList.add("show");
+      }
+      if (field) field.focus();
+    }
+    function clearError(form) {
+      var box = form.querySelector(".form-error");
+      if (box) box.classList.remove("show");
+    }
+
+    /* ---------- Login ---------- */
+    var loginForm = document.getElementById("login-form");
+    if (loginForm) {
+      loginForm.addEventListener("input", function () {
+        clearError(loginForm);
+      });
+
+      loginForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var role = document.getElementById("role").value;
+        var emailField = document.getElementById("email");
+        var email = emailField.value.trim().toLowerCase();
+
+        var user = readUsers().filter(function (u) {
+          return u.email === email;
+        })[0];
+        if (!user) {
+          showError(
+            loginForm,
+            "No account found for this email. Please sign up first.",
+            emailField,
+          );
+          return;
+        }
+        if (user.role !== role) {
+          showError(
+            loginForm,
+            "This email is registered as " +
+              roleNames[user.role] +
+              ". Change the role and try again.",
+            document.getElementById("role"),
+          );
+          return;
+        }
+
+        setItem("academyos_role", user.role);
+        setItem(
+          "academyos_current",
+          JSON.stringify({
+            name: user.name,
+            email: user.email,
+            role: user.role,
+          }),
+        );
+        window.location.href =
+          user.role === "teacher"
+            ? "pages/teacher-dashboard.html"
+            : "index.html";
+      });
+    }
+
+    /* ---------- Sign up ---------- */
+    var signupForm = document.getElementById("signup-form");
+    if (signupForm) {
+      signupForm.addEventListener("input", function () {
+        clearError(signupForm);
+      });
+
+      signupForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var nameField = document.getElementById("signup-name");
+        var emailField = document.getElementById("signup-email");
+        var phoneField = document.getElementById("signup-phone");
+        var passField = document.getElementById("signup-password");
+        var confirmField = document.getElementById("signup-confirm");
+
+        var name = nameField.value.trim();
+        var email = emailField.value.trim().toLowerCase();
+        var phone = phoneField.value.trim();
+
+        if (name.length < 3) {
+          showError(signupForm, "Please enter your full name.", nameField);
+          return;
+        }
+        if (phone && !phonePattern.test(phone)) {
+          showError(
+            signupForm,
+            "Enter a valid phone number, for example 0300-1234567.",
+            phoneField,
+          );
+          return;
+        }
+        if (passField.value.length < 8) {
+          showError(
+            signupForm,
+            "Password must be at least 8 characters.",
+            passField,
+          );
+          return;
+        }
+        if (passField.value !== confirmField.value) {
+          showError(
+            signupForm,
+            "The two passwords do not match.",
+            confirmField,
+          );
+          return;
+        }
+
+        var users = readUsers();
+        if (
+          users.some(function (u) {
+            return u.email === email;
+          })
+        ) {
+          showError(
+            signupForm,
+            "An account with this email already exists. Please log in.",
+            emailField,
+          );
+          return;
+        }
+
+        users.push({
+          name: name,
+          email: email,
+          role: document.getElementById("signup-role").value,
+          phone: phone,
+        });
+        writeUsers(users);
+        setItem("academyos_flash", "Account created. Please log in.");
+        window.location.href = "login.html";
+      });
+    }
+  })();
 })();

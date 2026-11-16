@@ -1292,3 +1292,21 @@ html[data-theme="dark"] {
   border-color: #8ea0ff;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
 }
+.form-error {
+  display: none;
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 7px;
+  background: #fdeaea;
+  color: #c0392b;
+  font-size: 13px;
+  font-weight: 700;
+}
+.form-error.show {
+  display: block;
+}
+
+[data-theme="dark"] .form-error {
+  background: rgba(255, 122, 107, 0.16);
+  color: #ff7a6b;
+}
