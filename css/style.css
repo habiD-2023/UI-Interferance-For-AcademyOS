@@ -1819,3 +1819,36 @@ html[data-theme="dark"] {
 [data-theme="dark"] .danger-button:hover {
   background: rgba(255, 122, 107, 0.16);
 }
+
+/* ===== Backup and restore (paste at the END of css/style.css) ===== */
+.backup-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+button.cancel-button {
+  background: transparent;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+button.cancel-button:hover {
+  background: #f1f3fb;
+}
+
+.backup-note {
+  margin: 16px 0 0;
+  color: #778398;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+[data-theme="dark"] button.cancel-button:hover {
+  background: #1f2b44;
+}
+
+[data-theme="dark"] .backup-note {
+  color: #9aa7bd;
+}

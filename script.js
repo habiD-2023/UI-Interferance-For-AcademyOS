@@ -749,166 +749,475 @@
     }
   })();
   /* ===== Settings page (paste at the END of script.js, after the last block) ===== */
-(function () {
-  "use strict";
+  (function () {
+    "use strict";
 
-  if (!document.getElementById("profile-form")) return;
+    if (!document.getElementById("profile-form")) return;
 
-  var phonePattern = /^03\d{2}-?\d{7}$/;
+    var phonePattern = /^03\d{2}-?\d{7}$/;
 
-  function read(key, fallback) {
-    try { var v = JSON.parse(localStorage.getItem(key)); return v === null ? fallback : v; } catch (e) { return fallback; }
-  }
-  function write(key, value) {
-    try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) { /* ignore */ }
-  }
-  function toast(text, type) {
-    var box = document.createElement("div");
-    box.setAttribute("role", "status");
-    box.textContent = text;
-    box.style.cssText =
-      "position:fixed;right:20px;bottom:20px;z-index:50;max-width:320px;padding:12px 16px;" +
-      "border-radius:8px;color:#fff;font-size:14px;font-weight:700;box-shadow:0 4px 14px rgba(0,0,0,.15);" +
-      "background:" + (type === "error" ? "#c0392b" : "#248453");
-    document.body.appendChild(box);
-    setTimeout(function () { box.remove(); }, 3200);
-  }
-  function byId(id) { return document.getElementById(id); }
-
-  var settings = read("academyos_settings", {});
-
-  /* ---------- Profile ---------- */
-  var current = read("academyos_current", null) || { name: "", email: "", role: "admin" };
-  var users = read("academyos_users", []);
-  var me = users.filter(function (u) { return u.email === current.email; })[0] || {};
-
-  byId("settings-name").value = current.name || "";
-  byId("settings-email").value = current.email || "";
-  byId("settings-phone").value = me.phone || "";
-  byId("settings-role").value = current.role === "teacher" ? "Teacher" : "Administrator";
-
-  byId("profile-form").addEventListener("submit", function (e) {
-    e.preventDefault();
-    var name = byId("settings-name").value.trim();
-    var email = byId("settings-email").value.trim().toLowerCase();
-    var phone = byId("settings-phone").value.trim();
-
-    if (name.length < 3) { toast("Please enter your full name.", "error"); return; }
-    if (phone && !phonePattern.test(phone)) { toast("Enter a valid phone number, for example 0300-1234567.", "error"); return; }
-
-    var list = read("academyos_users", []);
-    var taken = list.some(function (u) { return u.email === email && u.email !== current.email; });
-    if (taken) { toast("Another account already uses this email.", "error"); return; }
-
-    var found = false;
-    list.forEach(function (u) {
-      if (u.email === current.email) { u.name = name; u.email = email; u.phone = phone; found = true; }
-    });
-    if (!found) list.push({ name: name, email: email, role: current.role || "admin", phone: phone });
-    write("academyos_users", list);
-
-    current = { name: name, email: email, role: current.role || "admin" };
-    write("academyos_current", current);
-
-    // Update the avatar menu straight away
-    var parts = name.split(/\s+/);
-    var initials = (parts[0].charAt(0) + (parts.length > 1 ? parts[parts.length - 1].charAt(0) : "")).toUpperCase();
-    var nameEl = document.querySelector("[data-user-name]");
-    var initialsEl = document.querySelector("[data-user-initials]");
-    if (nameEl) nameEl.textContent = name;
-    if (initialsEl) initialsEl.textContent = initials;
-
-    toast("Profile saved.");
-  });
-
-  /* ---------- Academy information ---------- */
-  var academy = settings.academy || {};
-  if (academy.name) byId("academy-name").value = academy.name;
-  if (academy.phone) byId("academy-phone").value = academy.phone;
-  if (academy.address) byId("academy-address").value = academy.address;
-  if (academy.year) byId("academy-year").value = academy.year;
-
-  byId("academy-form").addEventListener("submit", function (e) {
-    e.preventDefault();
-    var phone = byId("academy-phone").value.trim();
-    if (phone && !phonePattern.test(phone)) { toast("Enter a valid contact number, for example 0300-1234567.", "error"); return; }
-    settings = read("academyos_settings", {});
-    settings.academy = {
-      name: byId("academy-name").value.trim(),
-      phone: phone,
-      address: byId("academy-address").value.trim(),
-      year: byId("academy-year").value
-    };
-    write("academyos_settings", settings);
-    toast("Academy details saved.");
-  });
-
-  /* ---------- Appearance (works together with the top bar toggle) ---------- */
-  var themeRadios = Array.prototype.slice.call(document.querySelectorAll('input[name="theme"]'));
-
-  function syncRadios() {
-    var theme = document.documentElement.dataset.theme === "dark" ? "dark" : "light";
-    themeRadios.forEach(function (r) { r.checked = r.value === theme; });
-  }
-  syncRadios();
-
-  themeRadios.forEach(function (r) {
-    r.addEventListener("change", function () {
-      document.documentElement.dataset.theme = r.value;
-      try { localStorage.setItem("academyos_theme", r.value); } catch (e) { /* ignore */ }
-    });
-  });
-
-  var topToggle = document.querySelector(".theme-toggle");
-  if (topToggle) topToggle.addEventListener("click", function () { setTimeout(syncRadios, 0); });
-
-  /* ---------- Notifications ---------- */
-  var notify = settings.notifications || null;
-  var notifyForm = byId("notify-form");
-  if (notify) {
-    ["fees", "attendance", "weekly"].forEach(function (name) {
-      if (notifyForm.elements[name]) notifyForm.elements[name].checked = !!notify[name];
-    });
-  }
-  notifyForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-    settings = read("academyos_settings", {});
-    settings.notifications = {
-      fees: notifyForm.elements.fees.checked,
-      attendance: notifyForm.elements.attendance.checked,
-      weekly: notifyForm.elements.weekly.checked
-    };
-    write("academyos_settings", settings);
-    toast("Notification preferences saved.");
-  });
-
-  /* ---------- Change password (prototype: nothing is stored) ---------- */
-  byId("password-form").addEventListener("submit", function (e) {
-    e.preventDefault();
-    var oldPass = byId("current-password").value;
-    var newPass = byId("new-password").value;
-    var confirmPass = byId("confirm-password").value;
-
-    if (newPass.length < 8) { toast("New password must be at least 8 characters.", "error"); byId("new-password").focus(); return; }
-    if (newPass === oldPass) { toast("New password must be different from the current one.", "error"); byId("new-password").focus(); return; }
-    if (newPass !== confirmPass) { toast("The two new passwords do not match.", "error"); byId("confirm-password").focus(); return; }
-
-    byId("password-form").reset();
-    toast("Password updated. (Demo only: passwords are not stored.)");
-  });
-
-  /* ---------- Reset demo data ---------- */
-  byId("reset-demo").addEventListener("click", function () {
-    if (!window.confirm("Remove the sample students, staff and attendance saved in this browser?")) return;
-    try {
-      var remove = [];
-      for (var i = 0; i < localStorage.length; i++) {
-        var key = localStorage.key(i);
-        if (key === "academyos_students" || key === "academyos_staff" || key.indexOf("academyos_attendance_") === 0) remove.push(key);
+    function read(key, fallback) {
+      try {
+        var v = JSON.parse(localStorage.getItem(key));
+        return v === null ? fallback : v;
+      } catch (e) {
+        return fallback;
       }
-      remove.forEach(function (k) { localStorage.removeItem(k); });
-    } catch (e) { /* ignore */ }
-    toast("Demo data removed.");
-  });
-})();
+    }
+    function write(key, value) {
+      try {
+        localStorage.setItem(key, JSON.stringify(value));
+      } catch (e) {
+        /* ignore */
+      }
+    }
+    function toast(text, type) {
+      var box = document.createElement("div");
+      box.setAttribute("role", "status");
+      box.textContent = text;
+      box.style.cssText =
+        "position:fixed;right:20px;bottom:20px;z-index:50;max-width:320px;padding:12px 16px;" +
+        "border-radius:8px;color:#fff;font-size:14px;font-weight:700;box-shadow:0 4px 14px rgba(0,0,0,.15);" +
+        "background:" +
+        (type === "error" ? "#c0392b" : "#248453");
+      document.body.appendChild(box);
+      setTimeout(function () {
+        box.remove();
+      }, 3200);
+    }
+    function byId(id) {
+      return document.getElementById(id);
+    }
+
+    var settings = read("academyos_settings", {});
+
+    /* ---------- Profile ---------- */
+    var current = read("academyos_current", null) || {
+      name: "",
+      email: "",
+      role: "admin",
+    };
+    var users = read("academyos_users", []);
+    var me =
+      users.filter(function (u) {
+        return u.email === current.email;
+      })[0] || {};
+
+    byId("settings-name").value = current.name || "";
+    byId("settings-email").value = current.email || "";
+    byId("settings-phone").value = me.phone || "";
+    byId("settings-role").value =
+      current.role === "teacher" ? "Teacher" : "Administrator";
+
+    byId("profile-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var name = byId("settings-name").value.trim();
+      var email = byId("settings-email").value.trim().toLowerCase();
+      var phone = byId("settings-phone").value.trim();
+
+      if (name.length < 3) {
+        toast("Please enter your full name.", "error");
+        return;
+      }
+      if (phone && !phonePattern.test(phone)) {
+        toast("Enter a valid phone number, for example 0300-1234567.", "error");
+        return;
+      }
+
+      var list = read("academyos_users", []);
+      var taken = list.some(function (u) {
+        return u.email === email && u.email !== current.email;
+      });
+      if (taken) {
+        toast("Another account already uses this email.", "error");
+        return;
+      }
+
+      var found = false;
+      list.forEach(function (u) {
+        if (u.email === current.email) {
+          u.name = name;
+          u.email = email;
+          u.phone = phone;
+          found = true;
+        }
+      });
+      if (!found)
+        list.push({
+          name: name,
+          email: email,
+          role: current.role || "admin",
+          phone: phone,
+        });
+      write("academyos_users", list);
+
+      current = { name: name, email: email, role: current.role || "admin" };
+      write("academyos_current", current);
+
+      // Update the avatar menu straight away
+      var parts = name.split(/\s+/);
+      var initials = (
+        parts[0].charAt(0) +
+        (parts.length > 1 ? parts[parts.length - 1].charAt(0) : "")
+      ).toUpperCase();
+      var nameEl = document.querySelector("[data-user-name]");
+      var initialsEl = document.querySelector("[data-user-initials]");
+      if (nameEl) nameEl.textContent = name;
+      if (initialsEl) initialsEl.textContent = initials;
+
+      toast("Profile saved.");
+    });
+
+    /* ---------- Academy information ---------- */
+    var academy = settings.academy || {};
+    if (academy.name) byId("academy-name").value = academy.name;
+    if (academy.phone) byId("academy-phone").value = academy.phone;
+    if (academy.address) byId("academy-address").value = academy.address;
+    if (academy.year) byId("academy-year").value = academy.year;
+
+    byId("academy-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var phone = byId("academy-phone").value.trim();
+      if (phone && !phonePattern.test(phone)) {
+        toast(
+          "Enter a valid contact number, for example 0300-1234567.",
+          "error",
+        );
+        return;
+      }
+      settings = read("academyos_settings", {});
+      settings.academy = {
+        name: byId("academy-name").value.trim(),
+        phone: phone,
+        address: byId("academy-address").value.trim(),
+        year: byId("academy-year").value,
+      };
+      write("academyos_settings", settings);
+      toast("Academy details saved.");
+    });
+
+    /* ---------- Appearance (works together with the top bar toggle) ---------- */
+    var themeRadios = Array.prototype.slice.call(
+      document.querySelectorAll('input[name="theme"]'),
+    );
+
+    function syncRadios() {
+      var theme =
+        document.documentElement.dataset.theme === "dark" ? "dark" : "light";
+      themeRadios.forEach(function (r) {
+        r.checked = r.value === theme;
+      });
+    }
+    syncRadios();
+
+    themeRadios.forEach(function (r) {
+      r.addEventListener("change", function () {
+        document.documentElement.dataset.theme = r.value;
+        try {
+          localStorage.setItem("academyos_theme", r.value);
+        } catch (e) {
+          /* ignore */
+        }
+      });
+    });
+
+    var topToggle = document.querySelector(".theme-toggle");
+    if (topToggle)
+      topToggle.addEventListener("click", function () {
+        setTimeout(syncRadios, 0);
+      });
+
+    /* ---------- Notifications ---------- */
+    var notify = settings.notifications || null;
+    var notifyForm = byId("notify-form");
+    if (notify) {
+      ["fees", "attendance", "weekly"].forEach(function (name) {
+        if (notifyForm.elements[name])
+          notifyForm.elements[name].checked = !!notify[name];
+      });
+    }
+    notifyForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      settings = read("academyos_settings", {});
+      settings.notifications = {
+        fees: notifyForm.elements.fees.checked,
+        attendance: notifyForm.elements.attendance.checked,
+        weekly: notifyForm.elements.weekly.checked,
+      };
+      write("academyos_settings", settings);
+      toast("Notification preferences saved.");
+    });
+
+    /* ---------- Change password (prototype: nothing is stored) ---------- */
+    byId("password-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var oldPass = byId("current-password").value;
+      var newPass = byId("new-password").value;
+      var confirmPass = byId("confirm-password").value;
+
+      if (newPass.length < 8) {
+        toast("New password must be at least 8 characters.", "error");
+        byId("new-password").focus();
+        return;
+      }
+      if (newPass === oldPass) {
+        toast("New password must be different from the current one.", "error");
+        byId("new-password").focus();
+        return;
+      }
+      if (newPass !== confirmPass) {
+        toast("The two new passwords do not match.", "error");
+        byId("confirm-password").focus();
+        return;
+      }
+
+      byId("password-form").reset();
+      toast("Password updated. (Demo only: passwords are not stored.)");
+    });
+
+    /* ---------- Reset demo data ---------- */
+    byId("reset-demo").addEventListener("click", function () {
+      if (
+        !window.confirm(
+          "Remove the sample students, staff and attendance saved in this browser?",
+        )
+      )
+        return;
+      try {
+        var remove = [];
+        for (var i = 0; i < localStorage.length; i++) {
+          var key = localStorage.key(i);
+          if (
+            key === "academyos_students" ||
+            key === "academyos_staff" ||
+            key.indexOf("academyos_attendance_") === 0
+          )
+            remove.push(key);
+        }
+        remove.forEach(function (k) {
+          localStorage.removeItem(k);
+        });
+      } catch (e) {
+        /* ignore */
+      }
+      toast("Demo data removed.");
+    });
+  })();
+  /* ===== Backup and restore (paste at the END of script.js, after the last block) ===== */
+  (function () {
+    "use strict";
+
+    var downloadBtn = document.getElementById("backup-download");
+    if (!downloadBtn) return;
+
+    var restoreBtn = document.getElementById("backup-restore");
+    var fileInput = document.getElementById("backup-file");
+    var statusEl = document.getElementById("backup-status");
+
+    // Session and housekeeping keys are never part of a backup.
+    var SKIP = {
+      academyos_current: 1,
+      academyos_role: 1,
+      academyos_flash: 1,
+      academyos_last_backup: 1,
+    };
+    var MAX_SIZE = 2 * 1024 * 1024; // 2 MB
+
+    function isBackupKey(key) {
+      return key.indexOf("academyos_") === 0 && !SKIP[key];
+    }
+
+    function toast(text, type) {
+      var box = document.createElement("div");
+      box.setAttribute("role", "status");
+      box.textContent = text;
+      box.style.cssText =
+        "position:fixed;right:20px;bottom:20px;z-index:50;max-width:320px;padding:12px 16px;" +
+        "border-radius:8px;color:#fff;font-size:14px;font-weight:700;box-shadow:0 4px 14px rgba(0,0,0,.15);" +
+        "background:" +
+        (type === "error" ? "#c0392b" : "#248453");
+      document.body.appendChild(box);
+      setTimeout(function () {
+        box.remove();
+      }, 3600);
+    }
+
+    function updateStatus() {
+      var last = null;
+      try {
+        last = parseInt(localStorage.getItem("academyos_last_backup"), 10);
+      } catch (e) {
+        last = null;
+      }
+      if (!last) {
+        statusEl.textContent = "No backup downloaded yet.";
+        return;
+      }
+      var when = new Date(last);
+      var text =
+        "Last backup: " +
+        when.toLocaleString("en-GB", {
+          dateStyle: "long",
+          timeStyle: "short",
+        }) +
+        ".";
+      if (Date.now() - last > 7 * 24 * 60 * 60 * 1000) {
+        text += " It has been over a week, so consider downloading a new one.";
+      }
+      statusEl.textContent = text;
+    }
+
+    /* ---------- Download ---------- */
+    downloadBtn.addEventListener("click", function () {
+      var data = {};
+      var count = 0;
+      try {
+        for (var i = 0; i < localStorage.length; i++) {
+          var key = localStorage.key(i);
+          if (isBackupKey(key)) {
+            data[key] = localStorage.getItem(key);
+            count++;
+          }
+        }
+      } catch (e) {
+        /* ignore */
+      }
+
+      if (!count) {
+        toast("There is no data to back up yet.", "error");
+        return;
+      }
+
+      var payload = {
+        app: "AcademyOS",
+        version: 1,
+        createdAt: new Date().toISOString(),
+        data: data,
+      };
+      var blob = new Blob([JSON.stringify(payload, null, 2)], {
+        type: "application/json",
+      });
+      var url = URL.createObjectURL(blob);
+
+      var link = document.createElement("a");
+      link.href = url;
+      link.download =
+        "academyos-backup-" + new Date().toISOString().slice(0, 10) + ".json";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(function () {
+        URL.revokeObjectURL(url);
+      }, 1000);
+
+      try {
+        localStorage.setItem("academyos_last_backup", String(Date.now()));
+      } catch (e) {
+        /* ignore */
+      }
+      updateStatus();
+      toast("Backup downloaded.");
+    });
+
+    /* ---------- Restore ---------- */
+    restoreBtn.addEventListener("click", function () {
+      fileInput.click();
+    });
+
+    fileInput.addEventListener("change", function () {
+      var file = fileInput.files && fileInput.files[0];
+      if (!file) return;
+
+      function finish() {
+        fileInput.value = "";
+      }
+
+      if (file.size > MAX_SIZE) {
+        toast("This file is too large to be an AcademyOS backup.", "error");
+        finish();
+        return;
+      }
+
+      var reader = new FileReader();
+      reader.onerror = function () {
+        toast("The file could not be read.", "error");
+        finish();
+      };
+      reader.onload = function () {
+        var payload;
+        try {
+          payload = JSON.parse(String(reader.result));
+        } catch (e) {
+          payload = null;
+        }
+
+        if (
+          !payload ||
+          payload.app !== "AcademyOS" ||
+          !payload.data ||
+          typeof payload.data !== "object"
+        ) {
+          toast("This is not a valid AcademyOS backup file.", "error");
+          finish();
+          return;
+        }
+
+        var keys = Object.keys(payload.data).filter(isBackupKey);
+        var valid = keys.every(function (k) {
+          return typeof payload.data[k] === "string";
+        });
+        if (!keys.length || !valid) {
+          toast("This backup file is empty or damaged.", "error");
+          finish();
+          return;
+        }
+
+        var made = payload.createdAt
+          ? new Date(payload.createdAt).toLocaleDateString("en-GB", {
+              dateStyle: "long",
+            })
+          : "an unknown date";
+        if (
+          !window.confirm(
+            "Restore the backup from " +
+              made +
+              "? The data currently saved in this browser will be replaced.",
+          )
+        ) {
+          finish();
+          return;
+        }
+
+        try {
+          var existing = [];
+          for (var i = 0; i < localStorage.length; i++) {
+            if (isBackupKey(localStorage.key(i)))
+              existing.push(localStorage.key(i));
+          }
+          existing.forEach(function (k) {
+            localStorage.removeItem(k);
+          });
+          keys.forEach(function (k) {
+            localStorage.setItem(k, payload.data[k]);
+          });
+        } catch (e) {
+          toast(
+            "Restore failed. Your browser storage may be full or blocked.",
+            "error",
+          );
+          finish();
+          return;
+        }
+
+        finish();
+        toast("Backup restored. Reloading...");
+        setTimeout(function () {
+          window.location.reload();
+        }, 1000);
+      };
+      reader.readAsText(file);
+    });
+
+    updateStatus();
+  })();
 })();

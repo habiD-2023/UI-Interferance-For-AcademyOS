@@ -9,27 +9,51 @@
   </head>
   <body>
     <header class="topbar">
-      <a class="brand" href="../index.html">
-        <img src="../assets/logo.jpg" alt="" />
-        <span class="brand-text">AcademyOS</span>
+      <a class="brand" href="index.html">
+        <img src="../Assets/logo.jpg" alt="" />
+        <span class="brand-text">
+          <a class="brand" href="index.html">Riazul Jannah Model School</a>
+        </span>
       </a>
+
       <div class="topbar-actions">
-        <button class="theme-toggle" type="button" aria-label="Switch to dark theme"></button>
+        <button
+          class="theme-toggle"
+          type="button"
+          aria-label="Switch to dark theme"
+        >
+          🌙
+        </button>
         <div class="user-menu">
-          <button class="avatar-button" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Open user menu">
-            <span data-user-initials>A</span>
+          <button
+            class="avatar-button"
+            type="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+            aria-label="Open user menu"
+          >
+            <span data-user-initials>AD</span>
           </button>
+
           <div class="user-dropdown" hidden>
             <div class="user-dropdown-info">
               <strong data-user-name>Administrator</strong>
               <small data-user-role>Administrator</small>
             </div>
-            <a class="user-dropdown-item" href="settings.html">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
-              Settings
-            </a>
             <button class="user-dropdown-logout" type="button" data-logout>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" x2="9" y1="12" y2="12" />
+              </svg>
               Logout
             </button>
           </div>
@@ -63,19 +87,41 @@
             <div class="form-grid">
               <div class="form-field">
                 <label for="settings-name">Full name</label>
-                <input id="settings-name" name="name" type="text" placeholder="e.g. Imran Khan" required />
+                <input
+                  id="settings-name"
+                  name="name"
+                  type="text"
+                  placeholder="e.g. Imran Khan"
+                  required
+                />
               </div>
               <div class="form-field">
                 <label for="settings-email">Email address</label>
-                <input id="settings-email" name="email" type="email" placeholder="name@example.com" required />
+                <input
+                  id="settings-email"
+                  name="email"
+                  type="email"
+                  placeholder="name@example.com"
+                  required
+                />
               </div>
               <div class="form-field">
                 <label for="settings-phone">Phone number</label>
-                <input id="settings-phone" name="phone" type="tel" placeholder="03XX-XXXXXXX" />
+                <input
+                  id="settings-phone"
+                  name="phone"
+                  type="tel"
+                  placeholder="03XX-XXXXXXX"
+                />
               </div>
               <div class="form-field">
                 <label for="settings-role">Role</label>
-                <input id="settings-role" type="text" value="Administrator" disabled />
+                <input
+                  id="settings-role"
+                  type="text"
+                  value="Administrator"
+                  disabled
+                />
               </div>
             </div>
             <div class="form-actions">
@@ -85,19 +131,37 @@
 
           <form class="form-section" id="academy-form">
             <h2>Academy information</h2>
-            <p class="section-note">These details appear on reports and receipts.</p>
+            <p class="section-note">
+              These details appear on reports and receipts.
+            </p>
             <div class="form-grid">
               <div class="form-field">
                 <label for="academy-name">Academy name</label>
-                <input id="academy-name" name="academyName" type="text" value="Riazul Jannah Model School" required />
+                <input
+                  id="academy-name"
+                  name="academyName"
+                  type="text"
+                  value="Riazul Jannah Model School"
+                  required
+                />
               </div>
               <div class="form-field">
                 <label for="academy-phone">Contact number</label>
-                <input id="academy-phone" name="academyPhone" type="tel" placeholder="03XX-XXXXXXX" />
+                <input
+                  id="academy-phone"
+                  name="academyPhone"
+                  type="tel"
+                  placeholder="03XX-XXXXXXX"
+                />
               </div>
               <div class="form-field">
                 <label for="academy-address">Address</label>
-                <input id="academy-address" name="academyAddress" type="text" placeholder="e.g. Main Road, Swat" />
+                <input
+                  id="academy-address"
+                  name="academyAddress"
+                  type="text"
+                  placeholder="e.g. Main Road, Swat"
+                />
               </div>
               <div class="form-field">
                 <label for="academy-year">Academic year</label>
@@ -109,36 +173,85 @@
               </div>
             </div>
             <div class="form-actions">
-              <button class="add-button" type="submit">Save academy details</button>
+              <button class="add-button" type="submit">
+                Save academy details
+              </button>
             </div>
           </form>
 
           <section class="form-section" id="appearance-section">
             <h2>Appearance</h2>
-            <p class="section-note">Choose how AcademyOS looks. This also works with the toggle in the top bar.</p>
+            <p class="section-note">
+              Choose how AcademyOS looks. This also works with the toggle in the
+              top bar.
+            </p>
             <div class="theme-options" role="radiogroup" aria-label="Theme">
-              <label class="theme-option"><input type="radio" name="theme" value="light" /><span>Light</span></label>
-              <label class="theme-option"><input type="radio" name="theme" value="dark" /><span>Dark</span></label>
+              <label class="theme-option"
+                ><input type="radio" name="theme" value="light" /><span
+                  >Light</span
+                ></label
+              >
+              <label class="theme-option"
+                ><input type="radio" name="theme" value="dark" /><span
+                  >Dark</span
+                ></label
+              >
             </div>
           </section>
 
           <form class="form-section" id="notify-form">
             <h2>Notifications</h2>
-            <p class="section-note">Choose what you want to be alerted about.</p>
+            <p class="section-note">
+              Choose what you want to be alerted about.
+            </p>
             <div class="setting-row">
-              <div><strong>Fee reminders</strong><span class="hint">Alert when fees are pending or overdue.</span></div>
-              <label class="switch"><input type="checkbox" name="fees" aria-label="Fee reminders" checked /><i></i></label>
+              <div>
+                <strong>Fee reminders</strong
+                ><span class="hint"
+                  >Alert when fees are pending or overdue.</span
+                >
+              </div>
+              <label class="switch"
+                ><input
+                  type="checkbox"
+                  name="fees"
+                  aria-label="Fee reminders"
+                  checked /><i></i
+              ></label>
             </div>
             <div class="setting-row">
-              <div><strong>Attendance alerts</strong><span class="hint">Alert when a class attendance is not marked.</span></div>
-              <label class="switch"><input type="checkbox" name="attendance" aria-label="Attendance alerts" checked /><i></i></label>
+              <div>
+                <strong>Attendance alerts</strong
+                ><span class="hint"
+                  >Alert when a class attendance is not marked.</span
+                >
+              </div>
+              <label class="switch"
+                ><input
+                  type="checkbox"
+                  name="attendance"
+                  aria-label="Attendance alerts"
+                  checked /><i></i
+              ></label>
             </div>
             <div class="setting-row">
-              <div><strong>Weekly summary email</strong><span class="hint">Receive a weekly summary of academy activity.</span></div>
-              <label class="switch"><input type="checkbox" name="weekly" aria-label="Weekly summary email" /><i></i></label>
+              <div>
+                <strong>Weekly summary email</strong
+                ><span class="hint"
+                  >Receive a weekly summary of academy activity.</span
+                >
+              </div>
+              <label class="switch"
+                ><input
+                  type="checkbox"
+                  name="weekly"
+                  aria-label="Weekly summary email" /><i></i
+              ></label>
             </div>
             <div class="form-actions">
-              <button class="add-button" type="submit">Save notifications</button>
+              <button class="add-button" type="submit">
+                Save notifications
+              </button>
             </div>
           </form>
 
@@ -148,16 +261,34 @@
             <div class="form-grid">
               <div class="form-field">
                 <label for="current-password">Current password</label>
-                <input id="current-password" type="password" placeholder="Enter current password" autocomplete="current-password" required />
+                <input
+                  id="current-password"
+                  type="password"
+                  placeholder="Enter current password"
+                  autocomplete="current-password"
+                  required
+                />
               </div>
               <div></div>
               <div class="form-field">
                 <label for="new-password">New password</label>
-                <input id="new-password" type="password" placeholder="At least 8 characters" autocomplete="new-password" required />
+                <input
+                  id="new-password"
+                  type="password"
+                  placeholder="At least 8 characters"
+                  autocomplete="new-password"
+                  required
+                />
               </div>
               <div class="form-field">
                 <label for="confirm-password">Confirm new password</label>
-                <input id="confirm-password" type="password" placeholder="Re-enter new password" autocomplete="new-password" required />
+                <input
+                  id="confirm-password"
+                  type="password"
+                  placeholder="Re-enter new password"
+                  autocomplete="new-password"
+                  required
+                />
               </div>
             </div>
             <div class="form-actions">
@@ -165,10 +296,44 @@
             </div>
           </form>
 
+          <section class="form-section" id="backup-section">
+            <h2>Backup and restore</h2>
+            <p class="section-note" id="backup-status">
+              No backup downloaded yet.
+            </p>
+
+            <div class="backup-actions">
+              <button class="add-button" type="button" id="backup-download">
+                Download backup
+              </button>
+              <button class="cancel-button" type="button" id="backup-restore">
+                Restore from backup
+              </button>
+              <input
+                type="file"
+                id="backup-file"
+                accept=".json,application/json"
+                hidden
+              />
+            </div>
+
+            <p class="backup-note">
+              The backup is a .json file with your students, staff, attendance,
+              accounts and settings. Keep it somewhere safe, because it contains
+              names, emails and phone numbers. Restoring replaces the data
+              currently saved in this browser.
+            </p>
+          </section>
+
           <section class="form-section" id="data-section">
             <h2>Demo data</h2>
-            <p class="section-note">Remove the sample students, staff and attendance saved in this browser. Your account and settings are kept.</p>
-            <button class="danger-button" type="button" id="reset-demo">Reset demo data</button>
+            <p class="section-note">
+              Remove the sample students, staff and attendance saved in this
+              browser. Your account and settings are kept.
+            </p>
+            <button class="danger-button" type="button" id="reset-demo">
+              Reset demo data
+            </button>
           </section>
         </div>
       </main>
