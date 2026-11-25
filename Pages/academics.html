@@ -9,51 +9,26 @@
   </head>
   <body>
     <header class="topbar">
-      <a class="brand" href="index.html">
-        <img src="../Assets/logo.jpg" alt="" />
-        <span class="brand-text">
-          <a class="brand" href="index.html">Riazul Jannah Model School</a>
-        </span>
+      <a class="brand" href="../index.html" aria-label="Home">
+        <img src="../assets/logo.jpg" alt="" />
       </a>
 
+      <div class="academy-title" data-academy-name>Riazul Jannah Model School</div>
+
       <div class="topbar-actions">
-        <button
-          class="theme-toggle"
-          type="button"
-          aria-label="Switch to dark theme"
-        >
-          🌙
-        </button>
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme"><svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg><svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg></button>
         <div class="user-menu">
-          <button
-            class="avatar-button"
-            type="button"
-            aria-haspopup="true"
-            aria-expanded="false"
-            aria-label="Open user menu"
-          >
+          <button class="avatar-button" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Open user menu">
             <span data-user-initials>AD</span>
           </button>
-
           <div class="user-dropdown" hidden>
             <div class="user-dropdown-info">
               <strong data-user-name>Administrator</strong>
               <small data-user-role>Administrator</small>
             </div>
+            <a class="user-dropdown-item" href="settings.html">Settings</a>
             <button class="user-dropdown-logout" type="button" data-logout>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                <polyline points="16 17 21 12 16 7" />
-                <line x1="21" x2="9" y1="12" y2="12" />
-              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
               Logout
             </button>
           </div>
@@ -81,65 +56,24 @@
         </section>
 
         <section class="summary-grid spaced" aria-label="Academic summary">
-          <article class="summary-card">
-            <h2>Classes</h2>
-            <p class="summary-value">5</p>
-          </article>
-          <article class="summary-card">
-            <h2>Sections</h2>
-            <p class="summary-value">10</p>
-          </article>
-          <article class="summary-card">
-            <h2>Subjects</h2>
-            <p class="summary-value">9</p>
-          </article>
-          <article class="summary-card">
-            <h2>Periods per day</h2>
-            <p class="summary-value">6</p>
-          </article>
+          <article class="summary-card"><h2>Classes</h2><p class="summary-value">5</p></article>
+          <article class="summary-card"><h2>Sections</h2><p class="summary-value">10</p></article>
+          <article class="summary-card"><h2>Subjects</h2><p class="summary-value">9</p></article>
+          <article class="summary-card"><h2>Periods per day</h2><p class="summary-value">6</p></article>
         </section>
 
         <section class="content-panel compact">
           <div class="students-heading">
-            <div>
-              <h2>Classes and sections</h2>
-              <p>Class teachers and enrolment.</p>
-            </div>
+            <div><h2>Classes and sections</h2><p>Class teachers and enrolment.</p></div>
             <a class="add-button" href="#">+ Add class</a>
           </div>
           <div class="table-scroll">
             <table class="students-table">
-              <thead>
-                <tr>
-                  <th>CLASS</th>
-                  <th>SECTION</th>
-                  <th>CLASS TEACHER</th>
-                  <th>STUDENTS</th>
-                  <th>ACTION</th>
-                </tr>
-              </thead>
+              <thead><tr><th>CLASS</th><th>SECTION</th><th>CLASS TEACHER</th><th>STUDENTS</th><th>ACTION</th></tr></thead>
               <tbody>
-                <tr>
-                  <td>Grade 8</td>
-                  <td>A</td>
-                  <td>Mr Imran Khan</td>
-                  <td>32</td>
-                  <td><a class="row-action" href="#">Edit</a></td>
-                </tr>
-                <tr>
-                  <td>Grade 8</td>
-                  <td>B</td>
-                  <td>Ms Sadia Noor</td>
-                  <td>30</td>
-                  <td><a class="row-action" href="#">Edit</a></td>
-                </tr>
-                <tr>
-                  <td>Grade 9</td>
-                  <td>A</td>
-                  <td>Mr Farhan Ali</td>
-                  <td>28</td>
-                  <td><a class="row-action" href="#">Edit</a></td>
-                </tr>
+                <tr><td>Grade 8</td><td>A</td><td>Mr Imran Khan</td><td>32</td><td><a class="row-action" href="#">Edit</a></td></tr>
+                <tr><td>Grade 8</td><td>B</td><td>Ms Sadia Noor</td><td>30</td><td><a class="row-action" href="#">Edit</a></td></tr>
+                <tr><td>Grade 9</td><td>A</td><td>Mr Farhan Ali</td><td>28</td><td><a class="row-action" href="#">Edit</a></td></tr>
               </tbody>
             </table>
           </div>
@@ -147,49 +81,16 @@
 
         <section class="content-panel compact">
           <div class="students-heading">
-            <div>
-              <h2>Weekly timetable</h2>
-              <p>Grade 8 · A</p>
-            </div>
+            <div><h2>Weekly timetable</h2><p>Grade 8 · A</p></div>
             <a class="cancel-button" href="#">Edit timetable</a>
           </div>
           <div class="table-scroll">
             <table class="students-table timetable">
-              <thead>
-                <tr>
-                  <th>PERIOD</th>
-                  <th>MON</th>
-                  <th>TUE</th>
-                  <th>WED</th>
-                  <th>THU</th>
-                  <th>FRI</th>
-                </tr>
-              </thead>
+              <thead><tr><th>PERIOD</th><th>MON</th><th>TUE</th><th>WED</th><th>THU</th><th>FRI</th></tr></thead>
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <td><span class="subject-chip">Maths</span></td>
-                  <td><span class="subject-chip">English</span></td>
-                  <td><span class="subject-chip">Physics</span></td>
-                  <td><span class="subject-chip">Urdu</span></td>
-                  <td><span class="subject-chip">Maths</span></td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td><span class="subject-chip">English</span></td>
-                  <td><span class="subject-chip">Maths</span></td>
-                  <td><span class="subject-chip">Computer</span></td>
-                  <td><span class="subject-chip">Physics</span></td>
-                  <td><span class="subject-chip">Islamiat</span></td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td><span class="subject-chip">Urdu</span></td>
-                  <td><span class="subject-chip">Chemistry</span></td>
-                  <td><span class="subject-chip">Maths</span></td>
-                  <td><span class="subject-chip">English</span></td>
-                  <td><span class="subject-chip">Chemistry</span></td>
-                </tr>
+                <tr><td>1</td><td><span class="subject-chip">Maths</span></td><td><span class="subject-chip">English</span></td><td><span class="subject-chip">Physics</span></td><td><span class="subject-chip">Urdu</span></td><td><span class="subject-chip">Maths</span></td></tr>
+                <tr><td>2</td><td><span class="subject-chip">English</span></td><td><span class="subject-chip">Maths</span></td><td><span class="subject-chip">Computer</span></td><td><span class="subject-chip">Physics</span></td><td><span class="subject-chip">Islamiat</span></td></tr>
+                <tr><td>3</td><td><span class="subject-chip">Urdu</span></td><td><span class="subject-chip">Chemistry</span></td><td><span class="subject-chip">Maths</span></td><td><span class="subject-chip">English</span></td><td><span class="subject-chip">Chemistry</span></td></tr>
               </tbody>
             </table>
           </div>

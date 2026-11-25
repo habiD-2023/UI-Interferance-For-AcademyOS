@@ -9,51 +9,26 @@
   </head>
   <body>
     <header class="topbar">
-      <a class="brand" href="index.html">
-        <img src="../Assets/logo.jpg" alt="" />
-        <span class="brand-text">
-          <a class="brand" href="index.html">Riazul Jannah Model School</a>
-        </span>
+      <a class="brand" href="../index.html" aria-label="Home">
+        <img src="../assets/logo.jpg" alt="" />
       </a>
 
+      <div class="academy-title" data-academy-name>Riazul Jannah Model School</div>
+
       <div class="topbar-actions">
-        <button
-          class="theme-toggle"
-          type="button"
-          aria-label="Switch to dark theme"
-        >
-          🌙
-        </button>
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme"><svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg><svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg></button>
         <div class="user-menu">
-          <button
-            class="avatar-button"
-            type="button"
-            aria-haspopup="true"
-            aria-expanded="false"
-            aria-label="Open user menu"
-          >
+          <button class="avatar-button" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Open user menu">
             <span data-user-initials>AD</span>
           </button>
-
           <div class="user-dropdown" hidden>
             <div class="user-dropdown-info">
               <strong data-user-name>Administrator</strong>
               <small data-user-role>Administrator</small>
             </div>
+            <a class="user-dropdown-item" href="settings.html">Settings</a>
             <button class="user-dropdown-logout" type="button" data-logout>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                <polyline points="16 17 21 12 16 7" />
-                <line x1="21" x2="9" y1="12" y2="12" />
-              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
               Logout
             </button>
           </div>
@@ -81,22 +56,10 @@
         </section>
 
         <section class="summary-grid spaced" aria-label="Attendance summary">
-          <article class="summary-card">
-            <h2>Total students</h2>
-            <p class="summary-value">32</p>
-          </article>
-          <article class="summary-card">
-            <h2>Present</h2>
-            <p class="summary-value present">28</p>
-          </article>
-          <article class="summary-card">
-            <h2>Absent</h2>
-            <p class="summary-value absent">3</p>
-          </article>
-          <article class="summary-card">
-            <h2>On leave</h2>
-            <p class="summary-value leave">1</p>
-          </article>
+          <article class="summary-card"><h2>Total students</h2><p class="summary-value">32</p></article>
+          <article class="summary-card"><h2>Present</h2><p class="summary-value present">28</p></article>
+          <article class="summary-card"><h2>Absent</h2><p class="summary-value absent">3</p></article>
+          <article class="summary-card"><h2>On leave</h2><p class="summary-value leave">1</p></article>
         </section>
 
         <section class="content-panel">
@@ -126,44 +89,17 @@
           <div class="table-scroll">
             <table class="students-table">
               <thead>
-                <tr>
-                  <th>STUDENT</th>
-                  <th>ADMISSION ID</th>
-                  <th>ATTENDANCE</th>
-                </tr>
+                <tr><th>STUDENT</th><th>ADMISSION ID</th><th>ATTENDANCE</th></tr>
               </thead>
               <tbody>
                 <tr>
                   <td>Ayesha Khan</td>
                   <td>STU-001</td>
                   <td>
-                    <div
-                      class="attendance-options"
-                      role="radiogroup"
-                      aria-label="Attendance for Ayesha Khan"
-                    >
-                      <label
-                        ><input
-                          type="radio"
-                          name="att-STU-001"
-                          value="present"
-                          checked
-                        /><span class="p">Present</span></label
-                      >
-                      <label
-                        ><input
-                          type="radio"
-                          name="att-STU-001"
-                          value="absent"
-                        /><span class="a">Absent</span></label
-                      >
-                      <label
-                        ><input
-                          type="radio"
-                          name="att-STU-001"
-                          value="leave"
-                        /><span class="l">Leave</span></label
-                      >
+                    <div class="attendance-options" role="radiogroup" aria-label="Attendance for Ayesha Khan">
+                      <label><input type="radio" name="att-STU-001" value="present" checked /><span class="p">Present</span></label>
+                      <label><input type="radio" name="att-STU-001" value="absent"  /><span class="a">Absent</span></label>
+                      <label><input type="radio" name="att-STU-001" value="leave"  /><span class="l">Leave</span></label>
                     </div>
                   </td>
                 </tr>
@@ -171,33 +107,10 @@
                   <td>Bilal Ahmad</td>
                   <td>STU-002</td>
                   <td>
-                    <div
-                      class="attendance-options"
-                      role="radiogroup"
-                      aria-label="Attendance for Bilal Ahmad"
-                    >
-                      <label
-                        ><input
-                          type="radio"
-                          name="att-STU-002"
-                          value="present"
-                          checked
-                        /><span class="p">Present</span></label
-                      >
-                      <label
-                        ><input
-                          type="radio"
-                          name="att-STU-002"
-                          value="absent"
-                        /><span class="a">Absent</span></label
-                      >
-                      <label
-                        ><input
-                          type="radio"
-                          name="att-STU-002"
-                          value="leave"
-                        /><span class="l">Leave</span></label
-                      >
+                    <div class="attendance-options" role="radiogroup" aria-label="Attendance for Bilal Ahmad">
+                      <label><input type="radio" name="att-STU-002" value="present" checked /><span class="p">Present</span></label>
+                      <label><input type="radio" name="att-STU-002" value="absent"  /><span class="a">Absent</span></label>
+                      <label><input type="radio" name="att-STU-002" value="leave"  /><span class="l">Leave</span></label>
                     </div>
                   </td>
                 </tr>
@@ -205,33 +118,10 @@
                   <td>Hamza Ali</td>
                   <td>STU-003</td>
                   <td>
-                    <div
-                      class="attendance-options"
-                      role="radiogroup"
-                      aria-label="Attendance for Hamza Ali"
-                    >
-                      <label
-                        ><input
-                          type="radio"
-                          name="att-STU-003"
-                          value="present"
-                        /><span class="p">Present</span></label
-                      >
-                      <label
-                        ><input
-                          type="radio"
-                          name="att-STU-003"
-                          value="absent"
-                          checked
-                        /><span class="a">Absent</span></label
-                      >
-                      <label
-                        ><input
-                          type="radio"
-                          name="att-STU-003"
-                          value="leave"
-                        /><span class="l">Leave</span></label
-                      >
+                    <div class="attendance-options" role="radiogroup" aria-label="Attendance for Hamza Ali">
+                      <label><input type="radio" name="att-STU-003" value="present"  /><span class="p">Present</span></label>
+                      <label><input type="radio" name="att-STU-003" value="absent" checked /><span class="a">Absent</span></label>
+                      <label><input type="radio" name="att-STU-003" value="leave"  /><span class="l">Leave</span></label>
                     </div>
                   </td>
                 </tr>
@@ -239,33 +129,10 @@
                   <td>Sana Gul</td>
                   <td>STU-004</td>
                   <td>
-                    <div
-                      class="attendance-options"
-                      role="radiogroup"
-                      aria-label="Attendance for Sana Gul"
-                    >
-                      <label
-                        ><input
-                          type="radio"
-                          name="att-STU-004"
-                          value="present"
-                        /><span class="p">Present</span></label
-                      >
-                      <label
-                        ><input
-                          type="radio"
-                          name="att-STU-004"
-                          value="absent"
-                        /><span class="a">Absent</span></label
-                      >
-                      <label
-                        ><input
-                          type="radio"
-                          name="att-STU-004"
-                          value="leave"
-                          checked
-                        /><span class="l">Leave</span></label
-                      >
+                    <div class="attendance-options" role="radiogroup" aria-label="Attendance for Sana Gul">
+                      <label><input type="radio" name="att-STU-004" value="present"  /><span class="p">Present</span></label>
+                      <label><input type="radio" name="att-STU-004" value="absent"  /><span class="a">Absent</span></label>
+                      <label><input type="radio" name="att-STU-004" value="leave" checked /><span class="l">Leave</span></label>
                     </div>
                   </td>
                 </tr>
@@ -274,9 +141,7 @@
           </div>
 
           <div class="panel-footer">
-            <button class="cancel-button" type="button">
-              Mark all present
-            </button>
+            <button class="cancel-button" type="button">Mark all present</button>
             <button class="add-button" type="button">Save attendance</button>
           </div>
         </section>

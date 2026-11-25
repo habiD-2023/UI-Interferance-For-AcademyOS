@@ -9,51 +9,26 @@
   </head>
   <body>
     <header class="topbar">
-      <a class="brand" href="index.html">
-        <img src="../Assets/logo.jpg" alt="" />
-        <span class="brand-text">
-          <a class="brand" href="index.html">Riazul Jannah Model School</a>
-        </span>
+      <a class="brand" href="../index.html" aria-label="Home">
+        <img src="../assets/logo.jpg" alt="" />
       </a>
 
+      <div class="academy-title" data-academy-name>Riazul Jannah Model School</div>
+
       <div class="topbar-actions">
-        <button
-          class="theme-toggle"
-          type="button"
-          aria-label="Switch to dark theme"
-        >
-          🌙
-        </button>
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme"><svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg><svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg></button>
         <div class="user-menu">
-          <button
-            class="avatar-button"
-            type="button"
-            aria-haspopup="true"
-            aria-expanded="false"
-            aria-label="Open user menu"
-          >
+          <button class="avatar-button" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Open user menu">
             <span data-user-initials>AD</span>
           </button>
-
           <div class="user-dropdown" hidden>
             <div class="user-dropdown-info">
               <strong data-user-name>Administrator</strong>
               <small data-user-role>Administrator</small>
             </div>
+            <a class="user-dropdown-item" href="settings.html">Settings</a>
             <button class="user-dropdown-logout" type="button" data-logout>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                <polyline points="16 17 21 12 16 7" />
-                <line x1="21" x2="9" y1="12" y2="12" />
-              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
               Logout
             </button>
           </div>
@@ -81,22 +56,10 @@
         </section>
 
         <section class="summary-grid spaced" aria-label="Fee summary">
-          <article class="summary-card">
-            <h2>Collected this month</h2>
-            <p class="summary-value">Rs. 480,000</p>
-          </article>
-          <article class="summary-card">
-            <h2>Pending</h2>
-            <p class="summary-value leave">Rs. 120,000</p>
-          </article>
-          <article class="summary-card">
-            <h2>Overdue</h2>
-            <p class="summary-value absent">Rs. 45,000</p>
-          </article>
-          <article class="summary-card">
-            <h2>Students paid</h2>
-            <p class="summary-value present">86%</p>
-          </article>
+          <article class="summary-card"><h2>Collected this month</h2><p class="summary-value">Rs. 480,000</p></article>
+          <article class="summary-card"><h2>Pending</h2><p class="summary-value leave">Rs. 120,000</p></article>
+          <article class="summary-card"><h2>Overdue</h2><p class="summary-value absent">Rs. 45,000</p></article>
+          <article class="summary-card"><h2>Students paid</h2><p class="summary-value present">86%</p></article>
         </section>
 
         <section class="content-panel">
@@ -111,43 +74,22 @@
           <form class="toolbar">
             <div class="form-field grow">
               <label for="fee-search">Search</label>
-              <input
-                id="fee-search"
-                type="search"
-                placeholder="Student name or admission ID"
-              />
+              <input id="fee-search" type="search" placeholder="Student name or admission ID" />
             </div>
             <div class="form-field">
               <label for="fee-class">Class</label>
-              <select id="fee-class">
-                <option>All classes</option>
-                <option>Grade 8</option>
-                <option>Grade 9</option>
-              </select>
+              <select id="fee-class"><option>All classes</option><option>Grade 8</option><option>Grade 9</option></select>
             </div>
             <div class="form-field">
               <label for="fee-status">Status</label>
-              <select id="fee-status">
-                <option>All</option>
-                <option>Paid</option>
-                <option>Pending</option>
-                <option>Overdue</option>
-              </select>
+              <select id="fee-status"><option>All</option><option>Paid</option><option>Pending</option><option>Overdue</option></select>
             </div>
           </form>
 
           <div class="table-scroll">
             <table class="students-table">
               <thead>
-                <tr>
-                  <th>STUDENT</th>
-                  <th>ADMISSION ID</th>
-                  <th>CLASS</th>
-                  <th>AMOUNT</th>
-                  <th>DUE DATE</th>
-                  <th>STATUS</th>
-                  <th>ACTION</th>
-                </tr>
+                <tr><th>STUDENT</th><th>ADMISSION ID</th><th>CLASS</th><th>AMOUNT</th><th>DUE DATE</th><th>STATUS</th><th>ACTION</th></tr>
               </thead>
               <tbody>
                 <tr>

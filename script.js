@@ -1220,4 +1220,578 @@
 
     updateStatus();
   })();
+  /* ===== AcademyOS updates (paste at the END of script.js, after the last block) =====
+   1) Academics: Add class      2) Reports: view, CSV download, print/PDF
+   3) Academy name from Settings shown next to the logo on every page            */
+  (function () {
+    "use strict";
+
+    /* ---------- Helpers ---------- */
+    const $ = (s, r) => (r || document).querySelector(s);
+    const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+    const read = (k, f) => {
+      try {
+        const v = JSON.parse(localStorage.getItem(k));
+        return v === null ? f : v;
+      } catch (e) {
+        return f;
+      }
+    };
+    const write = (k, v) => {
+      try {
+        localStorage.setItem(k, JSON.stringify(v));
+      } catch (e) {
+        /* ignore */
+      }
+    };
+
+    function el(tag, className, text) {
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      if (text !== undefined) node.textContent = text;
+      return node;
+    }
+    function toast(text, type) {
+      const box = el("div", "", text);
+      box.setAttribute("role", "status");
+      box.style.cssText =
+        "position:fixed;right:20px;bottom:20px;z-index:80;max-width:320px;padding:12px 16px;border-radius:8px;color:#fff;font-size:14px;font-weight:700;box-shadow:0 4px 14px rgba(0,0,0,.15);background:" +
+        (type === "error" ? "#c0392b" : "#248453");
+      document.body.appendChild(box);
+      setTimeout(() => box.remove(), 3400);
+    }
+
+    /* ---------- 3. Academy name next to the logo ---------- */
+    function applyBranding() {
+      const name = (read("academyos_settings", {}).academy || {}).name;
+      if (!name) return;
+      $$(".brand-text, [data-academy-name]").forEach((node) => {
+        (node.querySelector("a") || node).textContent = name;
+      });
+    }
+    applyBranding();
+    const academyForm = $("#academy-form");
+    if (academyForm)
+      academyForm.addEventListener("submit", () =>
+        setTimeout(applyBranding, 0),
+      );
+
+    /* ---------- 1. Academics: Add class ---------- */
+    const addClassBtn = $$(".add-button").find((b) =>
+      /add class/i.test(b.textContent),
+    );
+    if (addClassBtn) {
+      const tbody = $(".students-table:not(.timetable) tbody");
+      const cards = {};
+      $$(".summary-card").forEach((c) => {
+        const h = $("h2", c),
+          v = $(".summary-value", c);
+        if (h && v)
+          cards[h.textContent.trim().toLowerCase()] = {
+            node: v,
+            base: parseInt(v.textContent, 10) || 0,
+          };
+      });
+      const baseGrades = [
+        "Grade 6",
+        "Grade 7",
+        "Grade 8",
+        "Grade 9",
+        "Grade 10",
+      ];
+      const grades = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => "Grade " + n);
+
+      function renderClasses() {
+        $$("tr[data-saved]", tbody).forEach((r) => r.remove());
+        const list = read("academyos_classes", []);
+        list.forEach((c) => {
+          const row = el("tr");
+          row.dataset.saved = c.id;
+          [
+            c.className,
+            c.section,
+            c.teacher || "—",
+            String(c.students),
+          ].forEach((t) => row.appendChild(el("td", "", t)));
+          const act = el("td");
+          const del = el("a", "row-action", "Delete");
+          del.href = "#";
+          del.dataset.delete = c.id;
+          act.appendChild(del);
+          row.appendChild(act);
+          tbody.appendChild(row);
+        });
+        const extraClasses = new Set(
+          list
+            .map((c) => c.className)
+            .filter((n) => baseGrades.indexOf(n) === -1),
+        );
+        if (cards.sections)
+          cards.sections.node.textContent = cards.sections.base + list.length;
+        if (cards.classes)
+          cards.classes.node.textContent =
+            cards.classes.base + extraClasses.size;
+      }
+
+      tbody.addEventListener("click", (e) => {
+        const del = e.target.closest("[data-delete]");
+        if (!del) return;
+        e.preventDefault();
+        if (!window.confirm("Delete this class?")) return;
+        write(
+          "academyos_classes",
+          read("academyos_classes", []).filter(
+            (c) => c.id !== del.dataset.delete,
+          ),
+        );
+        renderClasses();
+        toast("Class deleted.");
+      });
+
+      function openClassModal() {
+        const backdrop = el("div", "modal-backdrop");
+        backdrop.innerHTML =
+          '<form class="modal" role="dialog" aria-modal="true" aria-labelledby="class-modal-title">' +
+          '<h2 id="class-modal-title">Add class</h2><p class="form-error" role="alert"></p>' +
+          '<div class="form-grid">' +
+          '<div class="form-field"><label for="m-class">Class</label><select id="m-class"><option value="">Select a class</option></select></div>' +
+          '<div class="form-field"><label for="m-section">Section</label><select id="m-section"><option value="">Select a section</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>' +
+          '<div class="form-field"><label for="m-teacher">Class teacher</label><input id="m-teacher" type="text" list="m-teachers" placeholder="e.g. Imran Khan" /><datalist id="m-teachers"></datalist></div>' +
+          '<div class="form-field"><label for="m-students">Number of students</label><input id="m-students" type="number" min="0" max="200" value="0" /></div>' +
+          '</div><div class="form-actions"><button class="cancel-button" type="button" data-close>Cancel</button><button class="add-button" type="submit">Save class</button></div></form>';
+
+        const form = $("form", backdrop);
+        grades.forEach((g) => {
+          const o = el("option", "", g);
+          o.value = g;
+          $("#m-class", backdrop).appendChild(o);
+        });
+        read("academyos_staff", [])
+          .filter((s) => s.role === "Teacher")
+          .forEach((s) => {
+            const o = el("option");
+            o.value = s.name;
+            $("#m-teachers", backdrop).appendChild(o);
+          });
+        document.body.appendChild(backdrop);
+        $("#m-class", backdrop).focus();
+
+        function close() {
+          backdrop.remove();
+          document.removeEventListener("keydown", onKey);
+          addClassBtn.focus();
+        }
+        function onKey(e) {
+          if (e.key === "Escape") close();
+        }
+        document.addEventListener("keydown", onKey);
+        backdrop.addEventListener("click", (e) => {
+          if (e.target === backdrop || e.target.closest("[data-close]"))
+            close();
+        });
+
+        form.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const className = $("#m-class", backdrop).value;
+          const section = $("#m-section", backdrop).value;
+          const teacher = $("#m-teacher", backdrop).value.trim();
+          const students = parseInt($("#m-students", backdrop).value, 10);
+          const err = $(".form-error", backdrop);
+          const fail = (msg) => {
+            err.textContent = msg;
+            err.classList.add("show");
+          };
+
+          if (!className) return fail("Please select a class.");
+          if (!section) return fail("Please select a section.");
+          if (isNaN(students) || students < 0 || students > 200)
+            return fail("Number of students must be between 0 and 200.");
+          const exists = $$("tr", tbody).some(
+            (r) =>
+              r.cells[0] &&
+              r.cells[1] &&
+              r.cells[0].textContent.trim() === className &&
+              r.cells[1].textContent.trim() === section,
+          );
+          if (exists)
+            return fail(className + " section " + section + " already exists.");
+
+          const list = read("academyos_classes", []);
+          list.push({
+            id: "c" + Date.now(),
+            className: className,
+            section: section,
+            teacher: teacher,
+            students: students,
+          });
+          write("academyos_classes", list);
+          close();
+          renderClasses();
+          toast("Class added.");
+        });
+      }
+
+      addClassBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        openClassModal();
+      });
+      renderClasses();
+    }
+
+    /* ---------- 2. Reports ---------- */
+    const grid = $(".report-grid");
+    if (grid) {
+      const SAMPLE_STUDENTS = [
+        ["Ayesha Khan", "STU-001", "Grade 8", "A"],
+        ["Bilal Ahmad", "STU-002", "Grade 8", "A"],
+        ["Hamza Ali", "STU-003", "Grade 9", "B"],
+        ["Sana Gul", "STU-004", "Grade 9", "A"],
+        ["Usman Shah", "STU-005", "Grade 10", "A"],
+      ];
+      const FEES = [
+        [
+          "Ayesha Khan",
+          "STU-001",
+          "Grade 8",
+          "Rs. 5,000",
+          "10 Nov 2026",
+          "Paid",
+        ],
+        [
+          "Bilal Ahmad",
+          "STU-002",
+          "Grade 8",
+          "Rs. 5,000",
+          "10 Nov 2026",
+          "Pending",
+        ],
+        [
+          "Hamza Ali",
+          "STU-003",
+          "Grade 9",
+          "Rs. 5,500",
+          "10 Oct 2026",
+          "Overdue",
+        ],
+      ];
+      const MARKS = {
+        "STU-001": [88, 92, 85],
+        "STU-002": [72, 65, 70],
+        "STU-003": [55, 60, 48],
+        "STU-004": [91, 89, 94],
+        "STU-005": [78, 81, 69],
+      };
+      const SAMPLE_STAFF = [
+        ["Imran Khan", "STF-001", "Teacher", "Maths"],
+        ["Sadia Noor", "STF-002", "Teacher", "English"],
+        ["Farhan Ali", "STF-003", "Accountant", "—"],
+      ];
+
+      const classFilter = () => {
+        const v = ($("#rep-class") || {}).value || "";
+        return /^all/i.test(v) ? "" : v;
+      };
+      const byClass = (rows, idx) => {
+        const f = classFilter();
+        return f ? rows.filter((r) => r[idx] === f) : rows;
+      };
+      const allStudents = () =>
+        SAMPLE_STUDENTS.concat(
+          read("academyos_students", []).map((s) => [
+            s.name,
+            s.admission,
+            s.className,
+            s.section || "",
+          ]),
+        );
+      const grade = (p) =>
+        p >= 80 ? "A" : p >= 70 ? "B" : p >= 60 ? "C" : p >= 50 ? "D" : "F";
+
+      const REPORTS = {
+        attendance() {
+          const from = ($("#rep-from") || {}).value,
+            to = ($("#rep-to") || {}).value;
+          let rows = [];
+          for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key.indexOf("academyos_attendance_") !== 0) continue;
+            const parts = key.replace("academyos_attendance_", "").split("_");
+            const date = parts[0],
+              cls = parts[1] || "",
+              sec = parts[2] || "";
+            if ((from && date < from) || (to && date > to)) continue;
+            const vals = Object.values(read(key, {}));
+            const p = vals.filter((v) => v === "present").length,
+              a = vals.filter((v) => v === "absent").length,
+              l = vals.filter((v) => v === "leave").length;
+            const total = p + a + l;
+            rows.push([
+              date,
+              cls,
+              sec,
+              p,
+              a,
+              l,
+              total ? Math.round((p / total) * 100) + "%" : "—",
+            ]);
+          }
+          rows.sort((x, y) => (x[0] < y[0] ? 1 : -1));
+          let note = "";
+          if (!rows.length) {
+            rows = [
+              ["2026-11-23", "Grade 8", "A", 28, 3, 1, "88%"],
+              ["2026-11-23", "Grade 9", "A", 26, 2, 0, "93%"],
+              ["2026-11-24", "Grade 8", "A", 30, 1, 1, "94%"],
+            ];
+            note =
+              "Sample data shown. Save attendance on the Attendance page to see real records here.";
+          }
+          return {
+            title: "Attendance report",
+            cols: [
+              "Date",
+              "Class",
+              "Section",
+              "Present",
+              "Absent",
+              "Leave",
+              "Attendance %",
+            ],
+            rows: byClass(rows, 1),
+            note: note,
+          };
+        },
+        fees() {
+          const rows = byClass(FEES, 2);
+          const paid = rows.filter((r) => r[5] === "Paid").length;
+          return {
+            title: "Fee collection report",
+            cols: [
+              "Student",
+              "Admission ID",
+              "Class",
+              "Amount",
+              "Due date",
+              "Status",
+            ],
+            rows: rows,
+            note: "Paid: " + paid + " of " + rows.length + " records.",
+          };
+        },
+        students() {
+          const rows = byClass(allStudents(), 2).map((r) => r.concat("Active"));
+          return {
+            title: "Student report",
+            cols: ["Student", "Admission ID", "Class", "Section", "Status"],
+            rows: rows,
+            note: "Total students: " + rows.length + ".",
+          };
+        },
+        results() {
+          const rows = byClass(
+            allStudents().filter((s) => MARKS[s[1]]),
+            2,
+          ).map((s) => {
+            const m = MARKS[s[1]],
+              total = m[0] + m[1] + m[2],
+              pct = Math.round((total / 300) * 100);
+            return [
+              s[0],
+              s[1],
+              s[2],
+              m[0],
+              m[1],
+              m[2],
+              total,
+              pct + "%",
+              grade(pct),
+            ];
+          });
+          return {
+            title: "Result report",
+            cols: [
+              "Student",
+              "Admission ID",
+              "Class",
+              "Maths",
+              "English",
+              "Physics",
+              "Total",
+              "Percentage",
+              "Grade",
+            ],
+            rows: rows,
+            note: "Sample marks. Real results will come from the backend.",
+          };
+        },
+        staff() {
+          const rows = SAMPLE_STAFF.concat(
+            read("academyos_staff", []).map((s) => [
+              s.name,
+              s.staffId,
+              s.role,
+              s.subject,
+            ]),
+          );
+          return {
+            title: "Staff report",
+            cols: ["Name", "Staff ID", "Role", "Subject"],
+            rows: rows,
+            note: "Total staff: " + rows.length + ".",
+          };
+        },
+        defaulters() {
+          const rows = byClass(
+            FEES.filter((r) => r[5] === "Overdue"),
+            2,
+          );
+          return {
+            title: "Defaulters list",
+            cols: [
+              "Student",
+              "Admission ID",
+              "Class",
+              "Amount",
+              "Due date",
+              "Status",
+            ],
+            rows: rows,
+            note: "Students with overdue fees.",
+          };
+        },
+      };
+
+      function keyFor(card) {
+        const t = ($("h2", card) || {}).textContent || "";
+        return /attendance/i.test(t)
+          ? "attendance"
+          : /fee collection/i.test(t)
+            ? "fees"
+            : /defaulter/i.test(t)
+              ? "defaulters"
+              : /student/i.test(t)
+                ? "students"
+                : /result/i.test(t)
+                  ? "results"
+                  : /staff/i.test(t)
+                    ? "staff"
+                    : null;
+      }
+
+      const panel = el("section", "content-panel");
+      panel.id = "report-output";
+      panel.hidden = true;
+      grid.after(panel);
+      let currentKey = null,
+        currentData = null;
+
+      function csvDownload() {
+        const esc = (v) => '"' + String(v).replace(/"/g, '""') + '"';
+        const lines = [currentData.cols]
+          .concat(currentData.rows)
+          .map((r) => r.map(esc).join(","));
+        const blob = new Blob(["\uFEFF" + lines.join("\r\n")], {
+          type: "text/csv;charset=utf-8",
+        });
+        const url = URL.createObjectURL(blob);
+        const a = el("a");
+        a.href = url;
+        a.download =
+          "academyos-" +
+          currentKey +
+          "-report-" +
+          new Date().toISOString().slice(0, 10) +
+          ".csv";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        toast("Report downloaded.");
+      }
+
+      function render(key) {
+        currentKey = key;
+        currentData = REPORTS[key]();
+        panel.innerHTML = "";
+        panel.hidden = false;
+
+        const actions = el("div", "report-actions");
+        const csv = el("button", "add-button", "Download CSV");
+        const print = el("button", "cancel-button", "Print / Save as PDF");
+        const close = el("button", "cancel-button", "Close");
+        [csv, print, close].forEach((b) => {
+          b.type = "button";
+          actions.appendChild(b);
+        });
+        csv.addEventListener("click", csvDownload);
+        print.addEventListener("click", () => window.print());
+        close.addEventListener("click", () => {
+          panel.hidden = true;
+          currentKey = null;
+        });
+
+        const meta =
+          "Generated " +
+          new Date().toLocaleDateString("en-GB", { dateStyle: "long" }) +
+          " \u00b7 " +
+          (classFilter() || "All classes");
+        panel.appendChild(el("h2", "panel-title", currentData.title));
+        panel.appendChild(el("p", "panel-note", meta));
+        panel.appendChild(actions);
+
+        if (!currentData.rows.length) {
+          panel.appendChild(
+            el("p", "panel-note", "No records match the selected filters."),
+          );
+        } else {
+          const wrap = el("div", "table-scroll");
+          const table = el("table", "students-table");
+          const head = el("tr");
+          currentData.cols.forEach((c) =>
+            head.appendChild(el("th", "", c.toUpperCase())),
+          );
+          table.appendChild(el("thead")).appendChild(head);
+          const body = el("tbody");
+          currentData.rows.forEach((r) => {
+            const tr = el("tr");
+            r.forEach((v) => tr.appendChild(el("td", "", String(v))));
+            body.appendChild(tr);
+          });
+          table.appendChild(body);
+          wrap.appendChild(table);
+          panel.appendChild(wrap);
+        }
+        if (currentData.note)
+          panel.appendChild(el("p", "panel-note", currentData.note));
+      }
+
+      $$(".report-card").forEach((card) => {
+        const key = keyFor(card);
+        const link = $("a, button", card);
+        if (!key || !link) return;
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          render(key);
+          panel.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      });
+
+      ["#rep-from", "#rep-to", "#rep-class"].forEach((s) => {
+        const f = $(s);
+        if (f)
+          f.addEventListener("change", () => {
+            if (currentKey) render(currentKey);
+          });
+      });
+
+      const exportBtn = $$(".toolbar .add-button").find((b) =>
+        /export/i.test(b.textContent),
+      );
+      if (exportBtn)
+        exportBtn.addEventListener("click", () => {
+          if (currentKey) window.print();
+          else toast("Open a report first, then export it.", "error");
+        });
+    }
+  })();
 })();
